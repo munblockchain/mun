@@ -34,7 +34,7 @@ go version
 
 ## Clone repository
 ```
-git clone https://github.com/munblockchain/mun-testnet
+git clone https://github.com/munblockchain/mun
 cd mun
 ```
 
