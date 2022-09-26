@@ -1,0 +1,14 @@
+syntax = "proto3";
+package mun.mun;
+
+import "gogoproto/gogo.proto";
+import "mun/params.proto";
+// this line is used by starport scaffolding # genesis/proto/import
+
+option go_package = "mun/x/mun/types";
+
+// GenesisState defines the mun module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  // this line is used by starport scaffolding # genesis/proto/state
+}
