@@ -73,7 +73,7 @@ curl --tlsv1 https://node1.mun.money/genesis? | jq ".result.genesis" > ~/.mun/co
 ## Update seed in config.toml to make p2p connection
 ```
 nano ~/.mun/config/config.toml
-seeds = "b4eeaf7ca17e5186b181885714cedc6a78d20c9b@node1.mun.money:26656"
+seeds = "b4eeaf7ca17e5186b181885714cedc6a78d20c9b@167.99.6.48:26656"
 ```
 
 ## Replace stake to TMUN
