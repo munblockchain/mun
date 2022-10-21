@@ -28,9 +28,8 @@ export default {
 
     // state
     let navbarLinks = [
-      { name: 'AirdropData', url: '/airdrop' },
-      { name: 'CoinData', url: '/coin' },
-      { name: 'TokenData', url: '/token' }
+      { name: 'MUN Wallet', url: '/coin' },
+      { name: 'MUN Assets', url: '/token' }
     ]
 
     // computed
@@ -40,7 +39,7 @@ export default {
     onBeforeMount(async () => {
       await $s.dispatch('common/env/init')
 
-      router.push('airdrop')
+      router.push('coin')
     })
 
     return {

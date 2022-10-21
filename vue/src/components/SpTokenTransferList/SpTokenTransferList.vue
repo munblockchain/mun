@@ -63,7 +63,7 @@ $avatar-offset: 32 + 16;
   /* identical to box height, or 36px */
   letter-spacing: -0.02em;
   font-feature-settings: 'zero';
-  color: #000000;
+  color: var(--text-color-primary);
   margin-bottom: 32px;
 }
 

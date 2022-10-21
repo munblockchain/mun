@@ -40,49 +40,7 @@
       @click="state.modalOpen = true"
     >
       <div class="add-icon">
-        <svg
-          width="32"
-          height="32"
-          viewBox="0 0 32 32"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <circle
-            cx="16"
-            cy="16"
-            r="15.5"
-            stroke="black"
-            stroke-opacity="0.07"
-          />
-          <g clip-path="url(#clip0_721_8528)">
-            <path
-              d="M16 8.5L16 24.5"
-              stroke="black"
-              stroke-opacity="0.33"
-              stroke-miterlimit="10"
-              stroke-linecap="square"
-              stroke-linejoin="round"
-            />
-            <path
-              d="M24 16.5L8 16.5"
-              stroke="black"
-              stroke-opacity="0.33"
-              stroke-miterlimit="10"
-              stroke-linecap="square"
-              stroke-linejoin="round"
-            />
-          </g>
-          <defs>
-            <clipPath id="clip0_721_8528">
-              <rect
-                width="16"
-                height="16"
-                fill="white"
-                transform="translate(8 8.5)"
-              />
-            </clipPath>
-          </defs>
-        </svg>
+        <AddIcon />
       </div>
 
       <div style="width: 12px; height: 100%" />
@@ -141,11 +99,12 @@
 import BigNumber from 'bignumber.js'
 import { computed, defineComponent, PropType, reactive } from 'vue'
 
-import { AssetForUI } from '../composables/useAssets'
+import { AssetForUI } from '../../composables/useAssets'
 
 import SpAmountInput from '../SpAmountInput'
 import SpDenom from '../SpDenom'
 import SpModal from '../SpModal'
+import AddIcon from '../../assets/icons/AddIcon.vue'
 
 export interface State {
   tokenSearch: string
@@ -160,7 +119,7 @@ export let initialState: State = {
 export default defineComponent({
   name: 'SpAmountSelect',
 
-  components: { SpModal, SpDenom, SpAmountInput },
+  components: { SpModal, SpDenom, SpAmountInput, AddIcon },
 
   emits: ['update'],
 
@@ -269,12 +228,12 @@ export default defineComponent({
   font-weight: normal;
   font-size: 16px;
   line-height: 130%;
-  color: #000000;
+  color: var(--text-color-primary);
   width: 100%;
 }
 
 .input.primary::placeholder {
-  color: rgba(0, 0, 0, 0.33);
+  color: var(--text-color-inactive);
 }
 
 .add-token {
@@ -285,6 +244,9 @@ export default defineComponent({
   cursor: pointer;
 }
 .add-icon {
+  svg *{
+    // stroke: blue;
+  }
 }
 .action-text {
   font-family: Inter;
@@ -300,7 +262,7 @@ export default defineComponent({
 
   /* light/muted */
 
-  color: rgba(0, 0, 0, 0.667);
+  color: var(--text-color-secondary);
 }
 
 .modal-list {
@@ -341,14 +303,14 @@ export default defineComponent({
 
   /* light/inactive */
 
-  color: #000000;
+  color: var(--text-color-inactive);
   padding: 0;
   height: 28px;
   border: 0;
   outline: 0;
 
   &:focus {
-    color: #000;
+    color: var(--text-color-primary);
 
     ~ .focus-background {
       background: rgba(0, 0, 0, 0.03);
@@ -363,7 +325,7 @@ export default defineComponent({
 }
 
 .input.secondary::placeholder {
-  color: rgba(0, 0, 0, 0.33);
+  color: var(--text-color-inactive);
 }
 
 .token-info {
@@ -387,8 +349,7 @@ export default defineComponent({
   letter-spacing: -0.007em;
 
   /* light/text */
-
-  color: #000000;
+  color: var(--text-color-primary);
 }
 
 .token-amount {

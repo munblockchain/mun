@@ -35,7 +35,8 @@
       },
       'bar-color': {
         type: String,
-        default: '#BE185D' // match .blue color to Material Design's 'Blue 500' color
+        // default: '#BE185D' // match .blue color to Material Design's 'Blue 500' color
+        default: '#ac61d7'
       },
       'bar-transition': {
         type: String,
