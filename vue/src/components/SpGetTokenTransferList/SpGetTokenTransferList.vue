@@ -184,7 +184,7 @@ $avatar-offset: 32 + 16;
   /* identical to box height, or 36px */
   letter-spacing: -0.02em;
   font-feature-settings: 'zero';
-  color: var(--text-color-primary);
+  color: #000000;
   margin-bottom: 32px;
 }
 .tx-list {
@@ -217,10 +217,10 @@ $avatar-offset: 32 + 16;
   left: 0;
   right: 0;
   top: 68px;
-  background: var(--background-color-primary);
+  background: #ffffff;
   box-shadow: 3px 9px 32px -4px rgba(0, 0, 0, 0.07);
   border-radius: 56px;
-  color: var(--text-color-primary);
+  color: #000000;
   font-weight: 500;
   font-size: 13px;
   position: absolute;
@@ -238,10 +238,10 @@ $avatar-offset: 32 + 16;
   left: 0;
   right: 0;
   bottom: 0;
-  background: var(--background-color-primary);
+  background: #ffffff;
   box-shadow: 3px 9px 32px -4px rgba(0, 0, 0, 0.07);
   border-radius: 56px;
-  color: var(--text-color-primary);
+  color: #000000;
   font-weight: 500;
   font-size: 13px;
   position: absolute;

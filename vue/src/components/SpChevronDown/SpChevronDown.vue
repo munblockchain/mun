@@ -23,9 +23,3 @@ export default defineComponent({
   name: 'SpChevronDown'
 })
 </script>
-
-<style scoped>
-.dark-theme svg * {
-  stroke: white;
-}
-</style>

@@ -56,8 +56,7 @@ export default defineComponent({
       type: String as PropType<string>
     },
     type: {
-      type: String as PropType<string>,
-      default: 'primary'
+      type: String as PropType<string>
     },
     disabled: {
       type: Boolean as PropType<boolean>,

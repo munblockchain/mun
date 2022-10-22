@@ -22,9 +22,9 @@ export interface RpcStatus {
 
 export enum V1Beta1Action {
   ActionInitialClaim = "ActionInitialClaim",
-  ActionDelegateStake = "ActionDelegateStake",
-  ActionVote = "ActionVote",
   ActionSwap = "ActionSwap",
+  ActionVote = "ActionVote",
+  ActionDelegateStake = "ActionDelegateStake",
 }
 
 export interface V1Beta1ClaimAuthorization {
@@ -35,7 +35,6 @@ export interface V1Beta1ClaimAuthorization {
 export interface V1Beta1ClaimRecord {
   address?: string;
   initial_claimable_amount?: V1Beta1Coin[];
-  action_ready?: boolean[];
   action_completed?: boolean[];
 }
 
@@ -321,7 +320,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    */
   queryClaimableForAction = (
     address: string,
-    action: "ActionInitialClaim" | "ActionDelegateStake" | "ActionVote" | "ActionSwap",
+    action: "ActionInitialClaim" | "ActionSwap" | "ActionVote" | "ActionDelegateStake",
     params: RequestParams = {},
   ) =>
     this.request<V1Beta1QueryClaimableForActionResponse, RpcStatus>({

@@ -16,7 +16,7 @@ var _ = strconv.Itoa(0)
 
 func CmdClaimFor() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "claim-for [action=0:InitialClaim,1:Staking,2:Voting,3:Swapping]",
+		Use:   "claim-for [action=0,1,2,3]",
 		Short: "Claim For Action",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
@@ -28,11 +28,11 @@ func CmdClaimFor() *cobra.Command {
 			action, _ := strconv.ParseInt(args[0], 10, 64)
 			typeAction := types.ActionInitialClaim
 
-			if action == 3 {
+			if action == 1 {
 				typeAction = types.ActionSwap
-			} else if action == 1 {
-				typeAction = types.ActionDelegateStake
 			} else if action == 2 {
+				typeAction = types.ActionDelegateStake
+			} else if action == 3 {
 				typeAction = types.ActionVote
 			}
 

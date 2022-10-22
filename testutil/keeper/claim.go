@@ -3,9 +3,6 @@ package keeper
 import (
 	"testing"
 
-	"mun/x/claim/keeper"
-	"mun/x/claim/types"
-
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/store"
@@ -16,6 +13,8 @@ import (
 	"github.com/tendermint/tendermint/libs/log"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 	tmdb "github.com/tendermint/tm-db"
+	"mun/x/claim/keeper"
+	"mun/x/claim/types"
 )
 
 func ClaimKeeper(t testing.TB) (*keeper.Keeper, sdk.Context) {
@@ -32,17 +31,15 @@ func ClaimKeeper(t testing.TB) (*keeper.Keeper, sdk.Context) {
 	cdc := codec.NewProtoCodec(registry)
 
 	paramsSubspace := typesparams.NewSubspace(cdc,
-		types.ModuleCdc.LegacyAmino,
+		types.Amino,
 		storeKey,
 		memStoreKey,
 		"ClaimParams",
 	)
-
 	k := keeper.NewKeeper(
 		cdc,
 		storeKey,
 		memStoreKey,
-		nil, nil, nil, nil,
 		paramsSubspace,
 	)
 

@@ -20,40 +20,37 @@ import CosmosIbcGoIbcCoreChannelV1 from './cosmos/ibc-go/ibc.core.channel.v1'
 import CosmosIbcGoIbcCoreClientV1 from './cosmos/ibc-go/ibc.core.client.v1'
 import CosmosIbcGoIbcCoreConnectionV1 from './cosmos/ibc-go/ibc.core.connection.v1'
 import CosmosIbcGoIbcCorePortV1 from './cosmos/ibc-go/ibc.core.port.v1'
-import MunMunAllocV1Beta1 from './mun/mun.alloc.v1beta1'
-import MunMunClaimV1Beta1 from './mun/mun.claim.v1beta1'
-import MunMunClaim from './mun/mun.claim'
-import MunMunMun from './mun/mun.mun'
+
+import MunAllocV1Beta1 from './mun.alloc.v1beta1'
+import MunClaimV1Beta1 from './mun.claim.v1beta1'
+import MunMun from './mun.mun'
 
 
 export default { 
-  CosmosCosmosSdkCosmosAuthV1Beta1: load(CosmosCosmosSdkCosmosAuthV1Beta1, 'cosmos.auth.v1beta1'),
-  CosmosCosmosSdkCosmosBankV1Beta1: load(CosmosCosmosSdkCosmosBankV1Beta1, 'cosmos.bank.v1beta1'),
-  CosmosCosmosSdkCosmosBaseTendermintV1Beta1: load(CosmosCosmosSdkCosmosBaseTendermintV1Beta1, 'cosmos.base.tendermint.v1beta1'),
-  CosmosCosmosSdkCosmosCrisisV1Beta1: load(CosmosCosmosSdkCosmosCrisisV1Beta1, 'cosmos.crisis.v1beta1'),
-  CosmosCosmosSdkCosmosDistributionV1Beta1: load(CosmosCosmosSdkCosmosDistributionV1Beta1, 'cosmos.distribution.v1beta1'),
-  CosmosCosmosSdkCosmosEvidenceV1Beta1: load(CosmosCosmosSdkCosmosEvidenceV1Beta1, 'cosmos.evidence.v1beta1'),
-  CosmosCosmosSdkCosmosFeegrantV1Beta1: load(CosmosCosmosSdkCosmosFeegrantV1Beta1, 'cosmos.feegrant.v1beta1'),
-  CosmosCosmosSdkCosmosGovV1Beta1: load(CosmosCosmosSdkCosmosGovV1Beta1, 'cosmos.gov.v1beta1'),
-  CosmosCosmosSdkCosmosMintV1Beta1: load(CosmosCosmosSdkCosmosMintV1Beta1, 'cosmos.mint.v1beta1'),
-  CosmosCosmosSdkCosmosParamsV1Beta1: load(CosmosCosmosSdkCosmosParamsV1Beta1, 'cosmos.params.v1beta1'),
-  CosmosCosmosSdkCosmosSlashingV1Beta1: load(CosmosCosmosSdkCosmosSlashingV1Beta1, 'cosmos.slashing.v1beta1'),
-  CosmosCosmosSdkCosmosStakingV1Beta1: load(CosmosCosmosSdkCosmosStakingV1Beta1, 'cosmos.staking.v1beta1'),
-  CosmosCosmosSdkCosmosTxV1Beta1: load(CosmosCosmosSdkCosmosTxV1Beta1, 'cosmos.tx.v1beta1'),
-  CosmosCosmosSdkCosmosUpgradeV1Beta1: load(CosmosCosmosSdkCosmosUpgradeV1Beta1, 'cosmos.upgrade.v1beta1'),
-  CosmosCosmosSdkCosmosVestingV1Beta1: load(CosmosCosmosSdkCosmosVestingV1Beta1, 'cosmos.vesting.v1beta1'),
-  CosmosIbcGoIbcApplicationsTransferV1: load(CosmosIbcGoIbcApplicationsTransferV1, 'ibc.applications.transfer.v1'),
-  CosmosIbcGoIbcCoreChannelV1: load(CosmosIbcGoIbcCoreChannelV1, 'ibc.core.channel.v1'),
-  CosmosIbcGoIbcCoreClientV1: load(CosmosIbcGoIbcCoreClientV1, 'ibc.core.client.v1'),
-  CosmosIbcGoIbcCoreConnectionV1: load(CosmosIbcGoIbcCoreConnectionV1, 'ibc.core.connection.v1'),
-  CosmosIbcGoIbcCorePortV1: load(CosmosIbcGoIbcCorePortV1, 'ibc.core.port.v1'),
-  MunMunAllocV1Beta1: load(MunMunAllocV1Beta1, 'mun.alloc.v1beta1'),
-  MunMunClaimV1Beta1: load(MunMunClaimV1Beta1, 'mun.claim.v1beta1'),
-  MunMunClaim: load(MunMunClaim, 'mun.claim'),
-  MunMunMun: load(MunMunMun, 'mun.mun'),
-  
+    CosmosCosmosSdkCosmosAuthV1Beta1: load(CosmosCosmosSdkCosmosAuthV1Beta1, 'cosmos.auth.v1beta1'),
+    CosmosCosmosSdkCosmosBankV1Beta1: load(CosmosCosmosSdkCosmosBankV1Beta1, 'cosmos.bank.v1beta1'),
+    CosmosCosmosSdkCosmosBaseTendermintV1Beta1: load(CosmosCosmosSdkCosmosBaseTendermintV1Beta1, 'cosmos.base.tendermint.v1beta1'),
+    CosmosCosmosSdkCosmosCrisisV1Beta1: load(CosmosCosmosSdkCosmosCrisisV1Beta1, 'cosmos.crisis.v1beta1'),
+    CosmosCosmosSdkCosmosDistributionV1Beta1: load(CosmosCosmosSdkCosmosDistributionV1Beta1, 'cosmos.distribution.v1beta1'),
+    CosmosCosmosSdkCosmosEvidenceV1Beta1: load(CosmosCosmosSdkCosmosEvidenceV1Beta1, 'cosmos.evidence.v1beta1'),
+    CosmosCosmosSdkCosmosFeegrantV1Beta1: load(CosmosCosmosSdkCosmosFeegrantV1Beta1, 'cosmos.feegrant.v1beta1'),
+    CosmosCosmosSdkCosmosGovV1Beta1: load(CosmosCosmosSdkCosmosGovV1Beta1, 'cosmos.gov.v1beta1'),
+    CosmosCosmosSdkCosmosMintV1Beta1: load(CosmosCosmosSdkCosmosMintV1Beta1, 'cosmos.mint.v1beta1'),
+    CosmosCosmosSdkCosmosParamsV1Beta1: load(CosmosCosmosSdkCosmosParamsV1Beta1, 'cosmos.params.v1beta1'),
+    CosmosCosmosSdkCosmosSlashingV1Beta1: load(CosmosCosmosSdkCosmosSlashingV1Beta1, 'cosmos.slashing.v1beta1'),
+    CosmosCosmosSdkCosmosStakingV1Beta1: load(CosmosCosmosSdkCosmosStakingV1Beta1, 'cosmos.staking.v1beta1'),
+    CosmosCosmosSdkCosmosTxV1Beta1: load(CosmosCosmosSdkCosmosTxV1Beta1, 'cosmos.tx.v1beta1'),
+    CosmosCosmosSdkCosmosUpgradeV1Beta1: load(CosmosCosmosSdkCosmosUpgradeV1Beta1, 'cosmos.upgrade.v1beta1'),
+    CosmosCosmosSdkCosmosVestingV1Beta1: load(CosmosCosmosSdkCosmosVestingV1Beta1, 'cosmos.vesting.v1beta1'),
+    CosmosIbcGoIbcApplicationsTransferV1: load(CosmosIbcGoIbcApplicationsTransferV1, 'ibc.applications.transfer.v1'),
+    CosmosIbcGoIbcCoreChannelV1: load(CosmosIbcGoIbcCoreChannelV1, 'ibc.core.channel.v1'),
+    CosmosIbcGoIbcCoreClientV1: load(CosmosIbcGoIbcCoreClientV1, 'ibc.core.client.v1'),
+    CosmosIbcGoIbcCoreConnectionV1: load(CosmosIbcGoIbcCoreConnectionV1, 'ibc.core.connection.v1'),
+    CosmosIbcGoIbcCorePortV1: load(CosmosIbcGoIbcCorePortV1, 'ibc.core.port.v1'),
+    MunAllocV1Beta1: load(MunAllocV1Beta1, 'mun.alloc.v1beta1'),
+    MunClaimV1Beta1: load(MunClaimV1Beta1, 'mun.claim.v1beta1'),
+    MunMun: load(MunMun, 'mun.mun'),    
 }
-
 
 function load(mod, fullns) {
     return function init(store) {        

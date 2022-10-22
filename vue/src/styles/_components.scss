@@ -569,9 +569,9 @@
   display: inline-flex;
   height: 48px;
   padding: 0rem 2rem;
-  background: var(--button-primary-bg-color);
-  border: 0.2rem solid var(--button-primary-bg-color);
-  color: var(--button-primary-text-color);
+  background: $black;
+  border: 0.2rem solid $black;
+  color: white;
   font-size: 16px;
   font-weight: 500;
   border-radius: 0.8rem;
@@ -592,16 +592,16 @@
   }
 
   &.sp-button-primary {
-    background: var(--button-primary-bg-color);
-    border: 0.2rem solid var(--button-primary-bg-color);
-    color: var(--button-primary-text-color);
+    background: $black;
+    border: 0.2rem solid $black;
+    color: white;
     margin-bottom: 1rem;
   }
 
   &.sp-button-secondary {
-    background: var(--button-secondary-bg-color);
-    border: 0.2rem solid var(--button-primary-bg-color);
-    color: var(--button-secondary-text-color);
+    background: white;
+    border: 0.2rem solid $black;
+    color: $black;
     margin-bottom: 1rem;
   }
   &.sp-button__progress {
@@ -632,8 +632,8 @@
   &:disabled {
     cursor: not-allowed;
     transition: none;
-    background: var(--button-disabled-bg-color) !important;
-    color: var(--button-disabled-text-color) !important;
+    background: rgba($black, 0.04) !important;
+    color: rgba($black, 0.4) !important;
     border: 0.2rem solid rgba($black, 0) !important;
 
     &:hover {

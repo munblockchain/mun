@@ -265,7 +265,7 @@
         <div style="width: 100%; height: 24px" />
 
         <div>
-          <SpButton style="width: 100%" :disabled="ableToTx" @click="sendTx"
+          <SpButton style="width: 100%" :disabled="!ableToTx" @click="sendTx"
             >Send</SpButton
           >
         </div>
@@ -616,10 +616,10 @@ export default defineComponent({
 
   /* base/black 0 */
 
-  color: var(--text-color-primary);
+  color: #000000;
 
   &--disabled {
-    color: var(--text-color-inactive);
+    color: rgba(0, 0, 0, 0.33);
     &:hover {
       cursor: default !important;
     }
@@ -676,7 +676,7 @@ export default defineComponent({
 
   word-break: break-all;
 
-  color: var(--text-color-primary);
+  color: #000000;
 }
 
 .tx-feedback-title {
@@ -692,7 +692,7 @@ export default defineComponent({
 
   /* light/text */
 
-  color: var(--text-color-primary);
+  color: #000000;
 }
 .tx-feedback-subtitle.amount {
   text-transform: uppercase;
@@ -709,7 +709,7 @@ export default defineComponent({
 
   /* light/muted */
 
-  color: var(--text-color-secondary);
+  color: rgba(0, 0, 0, 0.667);
 }
 
 .tx-ongoing-title {
@@ -724,7 +724,7 @@ export default defineComponent({
 
   /* light/muted */
 
-  color: var(--text-color-secondary);
+  color: rgba(0, 0, 0, 0.667);
 }
 
 .tx-ongoing-subtitle {
@@ -740,7 +740,7 @@ export default defineComponent({
 
   /* light/text */
 
-  color: var(--text-color-primary);
+  color: #000000;
 }
 
 .title-wrapper {
@@ -757,7 +757,7 @@ export default defineComponent({
 
   /* light/muted */
 
-  color: var(--text-color-secondary);
+  color: rgba(0, 0, 0, 0.667);
 }
 
 .title {
@@ -771,7 +771,7 @@ export default defineComponent({
   letter-spacing: -0.016em;
   font-feature-settings: 'zero';
 
-  color: var(--text-color-inactive);
+  color: rgba(0, 0, 0, 0.33);
 
   &.disabled {
     &:hover {
@@ -781,7 +781,7 @@ export default defineComponent({
 }
 
 .title.active {
-  color: var(--text-color-primary);
+  color: #000000;
 }
 
 .title.active:hover {
@@ -802,14 +802,14 @@ export default defineComponent({
   margin-top: 4px;
   padding: 12px 16px;
   height: 48px;
-  background-color: var(--background-color-input);
+  background-color: rgba(0, 0, 0, 0.03);
   border-radius: 10px;
   font-family: Inter;
   font-style: normal;
   font-weight: normal;
   font-size: 16px;
   line-height: 130%;
-  color: var(--text-color-primary);
+  color: #000000;
   width: 100%;
   outline: 0;
   transition: background-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
@@ -817,13 +817,13 @@ export default defineComponent({
 
   &:not([disabled]) {
     &:hover {
-      background: var(--background-color-input-hover);
+      background: rgba(0, 0, 0, 0.07);
     }
   }
 
   &:focus {
-    background: var(--background-color-input-hover);
-    color: var(--text-color-primary);
+    background: rgba(0, 0, 0, 0.07);
+    color: #000;
   }
 
   &.error {
@@ -842,7 +842,7 @@ export default defineComponent({
 }
 
 .input::placeholder {
-  color: var(--text-color-inactive);
+  color: rgba(0, 0, 0, 0.33);
 }
 
 .input-wrapper {
