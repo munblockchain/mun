@@ -50,6 +50,7 @@
       </router-link>
     </div>
     <div class="navbar-section">
+      <SpDarkThemeButton />
       <SpAcc />
     </div>
   </div>
@@ -62,6 +63,7 @@ import SpAcc from '../SpAcc'
 import SpButton from '../SpButton'
 import SpModal from '../SpModal'
 import SpSystemBar from '../SpSystemBar'
+import SpDarkThemeButton from '../SpDarkThemeButton/SpDarkThemeButton.vue'
 
 export interface NavbarLink {
   name: string
@@ -75,8 +77,9 @@ export default defineComponent({
     SpAcc,
     SpModal,
     SpButton,
-    SpSystemBar
-  },
+    SpSystemBar,
+    SpDarkThemeButton
+},
 
   props: {
     links: {

@@ -34,7 +34,7 @@ go version
 
 ## Clone repository
 ```
-git clone https://github.com/munblockchain/mun
+git clone https://github.com/bitxat/mun
 cd mun
 ```
 
@@ -57,12 +57,12 @@ cp $(which mund) ~/.mun/upgrade_manager/genesis/bin
 sudo cp $(which mund-manager) /usr/bin
 ```
 
-## Initialize the validator with a moniker name (Example moniker_name: solid-moon-rock)
+## Initialize the validator with a moniker name(Example moniker: solid-moon-rock)
 ```
 mund init [moniker_name] --chain-id testmun
 ```
 
-## Add a new wallet address, store seeds and buy TMUN to it. (Example wallet_name: solid-moon-rock)
+## Add a new wallet address, store seeds and buy TMUN to it. 
 ```
 mund keys add [wallet_name] --keyring-backend test
 ```
@@ -70,15 +70,10 @@ mund keys add [wallet_name] --keyring-backend test
 ## Fetch genesis.json from genesis node
 curl --tlsv1 https://node1.mun.money/genesis? | jq ".result.genesis" > ~/.mun/config/genesis.json
 
-## Update seed in config.toml to make p2p connection ( Please use seed2 or seed3, since it has a connection limit)
-
-seed1 = "b4eeaf7ca17e5186b181885714cedc6a78d20c9b@167.99.6.48:26656"
-seed2 = "6a08f2f76baed249d3e3c666aaef5884e4b1005c@167.71.0.38:26656"
-seed3 = "9240277fca3bfa0c3b94efa60215ca10cf54f249@45.76.68.116:26656"
-
+## Update seed in config.toml to make p2p connection
 ```
 nano ~/.mun/config/config.toml
-seeds = "6a08f2f76baed249d3e3c666aaef5884e4b1005c@167.71.0.38:26656"
+seeds = "d33c86f138b34301ab041ea1371b3d682f33af9c@node1.mun.money:26656"
 ```
 
 ## Replace stake to TMUN
@@ -147,11 +142,9 @@ mund status
 
 You should wait until the node gets fully synchronized with other nodes. You can cross check with the genesis node by visiting https://node1.mun.money/status and check the latest block height. You can also check your node status through this link http://[Your_Node_IP]:26657/status.
 
-Or visit https://blockexplorer.mun.money
 
-
-**A transaction to become a validator by staking 50K TMUN**
+**A transaction to become a validator by staking TMUN**
 
 ```
-mund tx staking create-validator --from [wallet_name] --moniker [moniker_name] --pubkey $(mund tendermint show-validator) --chain-id testmun --keyring-backend test --amount 50000000000utmun --commission-max-change-rate 0.01 --commission-max-rate 0.2 --commission-rate 0.1 --min-self-delegation 1 --fees 200000utmun --gas auto --gas=auto --gas-adjustment=1.5 -y
+mund tx staking create-validator --from [wallet_name] --moniker [moniker_name] --pubkey $(mund tendermint show-validator) --chain-id testmun --keyring-backend test --amount 2000000000000000utmun --commission-max-change-rate 0.01 --commission-max-rate 0.2 --commission-rate 0.1 --min-self-delegation 1 --fees 20000utmun -y
 ```

@@ -23055,7 +23055,6 @@ paths:
                     source tracing information path.
                 description: denom_traces returns all denominations trace information.
               pagination:
-                description: pagination defines the pagination in the response.
                 type: object
                 properties:
                   next_key:
@@ -23072,6 +23071,16 @@ paths:
                       PageRequest.count_total
 
                       was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
+
+                  corresponding request message has used PageRequest.
+
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
             description: >-
               QueryConnectionsResponse is the response type for the
               Query/DenomTraces RPC
@@ -23548,7 +23557,6 @@ paths:
             type: object
             properties:
               params:
-                description: params defines the parameters of the module.
                 type: object
                 properties:
                   send_enabled:
@@ -23565,6 +23573,16 @@ paths:
                       transfers to this
 
                       chain.
+                description: >-
+                  Params defines the set of IBC transfer parameters.
+
+                  NOTE: To prevent a single token from being transferred, set
+                  the
+
+                  TransfersEnabled parameter to true and then set the bank
+                  module's SendEnabled
+
+                  parameter for the denomination to false.
             description: >-
               QueryParamsResponse is the response type for the Query/Params RPC
               method.
@@ -23771,7 +23789,6 @@ paths:
                   type: object
                   properties:
                     state:
-                      title: current state of the channel end
                       type: string
                       enum:
                         - STATE_UNINITIALIZED_UNSPECIFIED
@@ -23794,7 +23811,6 @@ paths:
                          - STATE_CLOSED: A channel has been closed and can no longer be used to send or receive
                         packets.
                     ordering:
-                      title: whether the channel is ordered or unordered
                       type: string
                       enum:
                         - ORDER_NONE_UNSPECIFIED
@@ -23807,8 +23823,8 @@ paths:
                          - ORDER_UNORDERED: packets can be delivered in any order, which may differ from the order in
                         which they were sent.
                          - ORDER_ORDERED: packets are delivered exactly in the order which they were sent
+                      title: Order defines if a channel is ORDERED or UNORDERED
                     counterparty:
-                      title: counterparty channel end
                       type: object
                       properties:
                         port_id:
@@ -23819,6 +23835,7 @@ paths:
                         channel_id:
                           type: string
                           title: channel end on the counterparty chain
+                      title: Counterparty defines a channel end counterparty
                     connection_hops:
                       type: array
                       items:
@@ -23846,7 +23863,6 @@ paths:
                     identifier fields.
                 description: list of stored channels of the chain.
               pagination:
-                title: pagination response
                 type: object
                 properties:
                   next_key:
@@ -23874,7 +23890,6 @@ paths:
                            PageResponse page = 2;
                    }
               height:
-                title: query block height
                 type: object
                 properties:
                   revision_number:
@@ -23902,6 +23917,13 @@ paths:
                   RevisionHeight
 
                   gets reset
+                title: >-
+                  Height is a monotonically increasing data type
+
+                  that can be compared against another Height for the purposes
+                  of updating and
+
+                  freezing clients
             description: >-
               QueryChannelsResponse is the response type for the Query/Channels
               RPC method.
@@ -24150,11 +24172,9 @@ paths:
             type: object
             properties:
               channel:
-                title: channel associated with the request identifiers
                 type: object
                 properties:
                   state:
-                    title: current state of the channel end
                     type: string
                     enum:
                       - STATE_UNINITIALIZED_UNSPECIFIED
@@ -24177,7 +24197,6 @@ paths:
                        - STATE_CLOSED: A channel has been closed and can no longer be used to send or receive
                       packets.
                   ordering:
-                    title: whether the channel is ordered or unordered
                     type: string
                     enum:
                       - ORDER_NONE_UNSPECIFIED
@@ -24189,8 +24208,8 @@ paths:
                        - ORDER_UNORDERED: packets can be delivered in any order, which may differ from the order in
                       which they were sent.
                        - ORDER_ORDERED: packets are delivered exactly in the order which they were sent
+                    title: Order defines if a channel is ORDERED or UNORDERED
                   counterparty:
-                    title: counterparty channel end
                     type: object
                     properties:
                       port_id:
@@ -24201,6 +24220,7 @@ paths:
                       channel_id:
                         type: string
                         title: channel end on the counterparty chain
+                    title: Counterparty defines a channel end counterparty
                   connection_hops:
                     type: array
                     items:
@@ -24228,7 +24248,6 @@ paths:
                 format: byte
                 title: merkle proof of existence
               proof_height:
-                title: height at which the proof was retrieved
                 type: object
                 properties:
                   revision_number:
@@ -24256,6 +24275,13 @@ paths:
                   RevisionHeight
 
                   gets reset
+                title: >-
+                  Height is a monotonically increasing data type
+
+                  that can be compared against another Height for the purposes
+                  of updating and
+
+                  freezing clients
             description: >-
               QueryChannelResponse is the response type for the Query/Channel
               RPC method.
@@ -24477,7 +24503,6 @@ paths:
             type: object
             properties:
               identified_client_state:
-                title: client state associated with the channel
                 type: object
                 properties:
                   client_id:
@@ -24656,7 +24681,6 @@ paths:
                             "@type": "type.googleapis.com/google.protobuf.Duration",
                             "value": "1.212s"
                           }
-                    title: client state
                 description: >-
                   IdentifiedClientState defines a client state with an
                   additional client
@@ -24667,7 +24691,6 @@ paths:
                 format: byte
                 title: merkle proof of existence
               proof_height:
-                title: height at which the proof was retrieved
                 type: object
                 properties:
                   revision_number:
@@ -24695,6 +24718,13 @@ paths:
                   RevisionHeight
 
                   gets reset
+                title: >-
+                  Height is a monotonically increasing data type
+
+                  that can be compared against another Height for the purposes
+                  of updating and
+
+                  freezing clients
             title: |-
               QueryChannelClientStateResponse is the Response type for the
               Query/QueryChannelClientState RPC method
@@ -25077,7 +25107,6 @@ paths:
                         "@type": "type.googleapis.com/google.protobuf.Duration",
                         "value": "1.212s"
                       }
-                title: consensus state associated with the channel
               client_id:
                 type: string
                 title: client ID associated with the consensus state
@@ -25086,7 +25115,6 @@ paths:
                 format: byte
                 title: merkle proof of existence
               proof_height:
-                title: height at which the proof was retrieved
                 type: object
                 properties:
                   revision_number:
@@ -25114,6 +25142,13 @@ paths:
                   RevisionHeight
 
                   gets reset
+                title: >-
+                  Height is a monotonically increasing data type
+
+                  that can be compared against another Height for the purposes
+                  of updating and
+
+                  freezing clients
             title: |-
               QueryChannelClientStateResponse is the Response type for the
               Query/QueryChannelClientState RPC method
@@ -25348,7 +25383,6 @@ paths:
                 format: byte
                 title: merkle proof of existence
               proof_height:
-                title: height at which the proof was retrieved
                 type: object
                 properties:
                   revision_number:
@@ -25376,6 +25410,13 @@ paths:
                   RevisionHeight
 
                   gets reset
+                title: >-
+                  Height is a monotonically increasing data type
+
+                  that can be compared against another Height for the purposes
+                  of updating and
+
+                  freezing clients
             title: |-
               QuerySequenceResponse is the request type for the
               Query/QueryNextSequenceReceiveResponse RPC method
@@ -25621,7 +25662,6 @@ paths:
 
                     state as a commitment, acknowledgement, or a receipt.
               pagination:
-                title: pagination response
                 type: object
                 properties:
                   next_key:
@@ -25649,7 +25689,6 @@ paths:
                            PageResponse page = 2;
                    }
               height:
-                title: query block height
                 type: object
                 properties:
                   revision_number:
@@ -25677,6 +25716,13 @@ paths:
                   RevisionHeight
 
                   gets reset
+                title: >-
+                  Height is a monotonically increasing data type
+
+                  that can be compared against another Height for the purposes
+                  of updating and
+
+                  freezing clients
             title: |-
               QueryPacketAcknowledgemetsResponse is the request type for the
               Query/QueryPacketAcknowledgements RPC method
@@ -25952,7 +25998,6 @@ paths:
                 format: byte
                 title: merkle proof of existence
               proof_height:
-                title: height at which the proof was retrieved
                 type: object
                 properties:
                   revision_number:
@@ -25980,6 +26025,13 @@ paths:
                   RevisionHeight
 
                   gets reset
+                title: >-
+                  Height is a monotonically increasing data type
+
+                  that can be compared against another Height for the purposes
+                  of updating and
+
+                  freezing clients
             title: >-
               QueryPacketAcknowledgementResponse defines the client query
               response for a
@@ -26233,7 +26285,6 @@ paths:
 
                     state as a commitment, acknowledgement, or a receipt.
               pagination:
-                title: pagination response
                 type: object
                 properties:
                   next_key:
@@ -26261,7 +26312,6 @@ paths:
                            PageResponse page = 2;
                    }
               height:
-                title: query block height
                 type: object
                 properties:
                   revision_number:
@@ -26289,6 +26339,13 @@ paths:
                   RevisionHeight
 
                   gets reset
+                title: >-
+                  Height is a monotonically increasing data type
+
+                  that can be compared against another Height for the purposes
+                  of updating and
+
+                  freezing clients
             title: |-
               QueryPacketCommitmentsResponse is the request type for the
               Query/QueryPacketCommitments RPC method
@@ -26557,7 +26614,6 @@ paths:
                   format: uint64
                 title: list of unreceived acknowledgement sequences
               height:
-                title: query block height
                 type: object
                 properties:
                   revision_number:
@@ -26585,6 +26641,13 @@ paths:
                   RevisionHeight
 
                   gets reset
+                title: >-
+                  Height is a monotonically increasing data type
+
+                  that can be compared against another Height for the purposes
+                  of updating and
+
+                  freezing clients
             title: |-
               QueryUnreceivedAcksResponse is the response type for the
               Query/UnreceivedAcks RPC method
@@ -26817,7 +26880,6 @@ paths:
                   format: uint64
                 title: list of unreceived packet sequences
               height:
-                title: query block height
                 type: object
                 properties:
                   revision_number:
@@ -26845,6 +26907,13 @@ paths:
                   RevisionHeight
 
                   gets reset
+                title: >-
+                  Height is a monotonically increasing data type
+
+                  that can be compared against another Height for the purposes
+                  of updating and
+
+                  freezing clients
             title: |-
               QueryUnreceivedPacketsResponse is the response type for the
               Query/UnreceivedPacketCommitments RPC method
@@ -27075,7 +27144,6 @@ paths:
                 format: byte
                 title: merkle proof of existence
               proof_height:
-                title: height at which the proof was retrieved
                 type: object
                 properties:
                   revision_number:
@@ -27103,6 +27171,13 @@ paths:
                   RevisionHeight
 
                   gets reset
+                title: >-
+                  Height is a monotonically increasing data type
+
+                  that can be compared against another Height for the purposes
+                  of updating and
+
+                  freezing clients
             title: >-
               QueryPacketCommitmentResponse defines the client query response
               for a packet
@@ -27337,7 +27412,6 @@ paths:
                 format: byte
                 title: merkle proof of existence
               proof_height:
-                title: height at which the proof was retrieved
                 type: object
                 properties:
                   revision_number:
@@ -27365,6 +27439,13 @@ paths:
                   RevisionHeight
 
                   gets reset
+                title: >-
+                  Height is a monotonically increasing data type
+
+                  that can be compared against another Height for the purposes
+                  of updating and
+
+                  freezing clients
             title: >-
               QueryPacketReceiptResponse defines the client query response for a
               packet
@@ -27595,7 +27676,6 @@ paths:
                   type: object
                   properties:
                     state:
-                      title: current state of the channel end
                       type: string
                       enum:
                         - STATE_UNINITIALIZED_UNSPECIFIED
@@ -27618,7 +27698,6 @@ paths:
                          - STATE_CLOSED: A channel has been closed and can no longer be used to send or receive
                         packets.
                     ordering:
-                      title: whether the channel is ordered or unordered
                       type: string
                       enum:
                         - ORDER_NONE_UNSPECIFIED
@@ -27631,8 +27710,8 @@ paths:
                          - ORDER_UNORDERED: packets can be delivered in any order, which may differ from the order in
                         which they were sent.
                          - ORDER_ORDERED: packets are delivered exactly in the order which they were sent
+                      title: Order defines if a channel is ORDERED or UNORDERED
                     counterparty:
-                      title: counterparty channel end
                       type: object
                       properties:
                         port_id:
@@ -27643,6 +27722,7 @@ paths:
                         channel_id:
                           type: string
                           title: channel end on the counterparty chain
+                      title: Counterparty defines a channel end counterparty
                     connection_hops:
                       type: array
                       items:
@@ -27670,7 +27750,6 @@ paths:
                     identifier fields.
                 description: list of channels associated with a connection.
               pagination:
-                title: pagination response
                 type: object
                 properties:
                   next_key:
@@ -27698,7 +27777,6 @@ paths:
                            PageResponse page = 2;
                    }
               height:
-                title: query block height
                 type: object
                 properties:
                   revision_number:
@@ -27726,6 +27804,13 @@ paths:
                   RevisionHeight
 
                   gets reset
+                title: >-
+                  Height is a monotonically increasing data type
+
+                  that can be compared against another Height for the purposes
+                  of updating and
+
+                  freezing clients
             title: |-
               QueryConnectionChannelsResponse is the Response type for the
               Query/QueryConnectionChannels RPC method
@@ -32786,13 +32871,9 @@ paths:
             type: object
             properties:
               params:
-                description: params defines the parameters of the module.
                 type: object
                 properties:
                   distribution_proportions:
-                    title: >-
-                      distribution_proportions defines the proportion of the
-                      minted denom
                     type: object
                     properties:
                       nft_incentives:
@@ -32865,6 +32946,13 @@ paths:
 
                         signatures required by gogoproto.
                     title: total initial claimable amount for the user
+                  action_ready:
+                    type: array
+                    items:
+                      type: boolean
+                    title: |-
+                      true if action is ready to claim
+                      index of bool in array refers to action enum #
                   action_completed:
                     type: array
                     items:
@@ -32952,9 +33040,9 @@ paths:
           type: string
           enum:
             - ActionInitialClaim
-            - ActionSwap
-            - ActionVote
             - ActionDelegateStake
+            - ActionVote
+            - ActionSwap
       tags:
         - Query
   /mun/claim/v1beta1/module_account_balance:
@@ -33018,7 +33106,6 @@ paths:
             type: object
             properties:
               params:
-                description: params defines the parameters of the module.
                 type: object
                 properties:
                   airdrop_enabled:
@@ -33044,11 +33131,12 @@ paths:
                           type: string
                           enum:
                             - ActionInitialClaim
-                            - ActionSwap
-                            - ActionVote
                             - ActionDelegateStake
+                            - ActionVote
+                            - ActionSwap
                           default: ActionInitialClaim
                     title: list of contracts and their allowed claim actions
+                description: Params defines the claim module's parameters.
             description: >-
               QueryParamsResponse is the response type for the Query/Params RPC
               method.
@@ -33134,8 +33222,8 @@ paths:
             type: object
             properties:
               params:
-                description: params holds all the parameters of this module.
                 type: object
+                description: Params defines the parameters for the module.
             description: >-
               QueryParamsResponse is response type for the Query/Params RPC
               method.
@@ -33157,6 +33245,129 @@ paths:
                     '@type':
                       type: string
                   additionalProperties: {}
+      tags:
+        - Query
+  /mun/mun/version:
+    get:
+      summary: Queries a list of Version items.
+      operationId: MunMunVersionAll
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              version:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    index:
+                      type: string
+                    version:
+                      type: string
+              pagination:
+                type: object
+                properties:
+                  next_key:
+                    type: string
+                    format: byte
+                    title: |-
+                      next_key is the key to be passed to PageRequest.key to
+                      query the next page most efficiently
+                  total:
+                    type: string
+                    format: uint64
+                    title: >-
+                      total is total number of results available if
+                      PageRequest.count_total
+
+                      was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
+
+                  corresponding request message has used PageRequest.
+
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.offset
+          description: >-
+            offset is a numeric offset that can be used when key is unavailable.
+
+            It is less efficient than using key. Only one of offset or key
+            should
+
+            be set.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.limit
+          description: >-
+            limit is the total number of results to be returned in the result
+            page.
+
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.count_total
+          description: >-
+            count_total is set to true  to indicate that the result set should
+            include
+
+            a count of the total number of items available for pagination in
+            UIs.
+
+            count_total is only respected when offset is used. It is ignored
+            when key
+
+            is set.
+          in: query
+          required: false
+          type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
+          in: query
+          required: false
+          type: boolean
       tags:
         - Query
   /tendermint/spn/claim/airdrop_supply:
@@ -33317,6 +33528,16 @@ paths:
             when key
 
             is set.
+          in: query
+          required: false
+          type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
           in: query
           required: false
           type: boolean
@@ -33483,6 +33704,16 @@ paths:
           in: query
           required: false
           type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
+          in: query
+          required: false
+          type: boolean
       tags:
         - Query
   '/tendermint/spn/claim/mission/{missionID}':
@@ -33542,8 +33773,8 @@ paths:
             type: object
             properties:
               params:
-                description: params holds all the parameters of this module.
                 type: object
+                description: Params defines the parameters for the module.
             description: >-
               QueryParamsResponse is response type for the Query/Params RPC
               method.
@@ -51599,7 +51830,6 @@ definitions:
             source tracing information path.
         description: denom_traces returns all denominations trace information.
       pagination:
-        description: pagination defines the pagination in the response.
         type: object
         properties:
           next_key:
@@ -51616,6 +51846,14 @@ definitions:
               PageRequest.count_total
 
               was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
     description: >-
       QueryConnectionsResponse is the response type for the Query/DenomTraces
       RPC
@@ -51625,7 +51863,6 @@ definitions:
     type: object
     properties:
       params:
-        description: params defines the parameters of the module.
         type: object
         properties:
           send_enabled:
@@ -51642,6 +51879,15 @@ definitions:
               transfers to this
 
               chain.
+        description: >-
+          Params defines the set of IBC transfer parameters.
+
+          NOTE: To prevent a single token from being transferred, set the
+
+          TransfersEnabled parameter to true and then set the bank module's
+          SendEnabled
+
+          parameter for the denomination to false.
     description: QueryParamsResponse is the response type for the Query/Params RPC method.
   ibc.core.client.v1.Height:
     type: object
@@ -51672,7 +51918,6 @@ definitions:
     type: object
     properties:
       state:
-        title: current state of the channel end
         type: string
         enum:
           - STATE_UNINITIALIZED_UNSPECIFIED
@@ -51693,7 +51938,6 @@ definitions:
            - STATE_CLOSED: A channel has been closed and can no longer be used to send or receive
           packets.
       ordering:
-        title: whether the channel is ordered or unordered
         type: string
         enum:
           - ORDER_NONE_UNSPECIFIED
@@ -51705,8 +51949,8 @@ definitions:
            - ORDER_UNORDERED: packets can be delivered in any order, which may differ from the order in
           which they were sent.
            - ORDER_ORDERED: packets are delivered exactly in the order which they were sent
+        title: Order defines if a channel is ORDERED or UNORDERED
       counterparty:
-        title: counterparty channel end
         type: object
         properties:
           port_id:
@@ -51717,6 +51961,7 @@ definitions:
           channel_id:
             type: string
             title: channel end on the counterparty chain
+        title: Counterparty defines a channel end counterparty
       connection_hops:
         type: array
         items:
@@ -51747,7 +51992,6 @@ definitions:
     type: object
     properties:
       state:
-        title: current state of the channel end
         type: string
         enum:
           - STATE_UNINITIALIZED_UNSPECIFIED
@@ -51768,7 +52012,6 @@ definitions:
            - STATE_CLOSED: A channel has been closed and can no longer be used to send or receive
           packets.
       ordering:
-        title: whether the channel is ordered or unordered
         type: string
         enum:
           - ORDER_NONE_UNSPECIFIED
@@ -51780,8 +52023,8 @@ definitions:
            - ORDER_UNORDERED: packets can be delivered in any order, which may differ from the order in
           which they were sent.
            - ORDER_ORDERED: packets are delivered exactly in the order which they were sent
+        title: Order defines if a channel is ORDERED or UNORDERED
       counterparty:
-        title: counterparty channel end
         type: object
         properties:
           port_id:
@@ -51792,6 +52035,7 @@ definitions:
           channel_id:
             type: string
             title: channel end on the counterparty chain
+        title: Counterparty defines a channel end counterparty
       connection_hops:
         type: array
         items:
@@ -51955,7 +52199,6 @@ definitions:
         format: byte
         title: actual opaque bytes transferred directly to the application module
       timeout_height:
-        title: block height after which the packet times out
         type: object
         properties:
           revision_number:
@@ -51982,6 +52225,13 @@ definitions:
           RevisionHeight
 
           gets reset
+        title: >-
+          Height is a monotonically increasing data type
+
+          that can be compared against another Height for the purposes of
+          updating and
+
+          freezing clients
       timeout_timestamp:
         type: string
         format: uint64
@@ -52015,7 +52265,6 @@ definitions:
     type: object
     properties:
       identified_client_state:
-        title: client state associated with the channel
         type: object
         properties:
           client_id:
@@ -52184,7 +52433,6 @@ definitions:
                     "@type": "type.googleapis.com/google.protobuf.Duration",
                     "value": "1.212s"
                   }
-            title: client state
         description: |-
           IdentifiedClientState defines a client state with an additional client
           identifier field.
@@ -52193,7 +52441,6 @@ definitions:
         format: byte
         title: merkle proof of existence
       proof_height:
-        title: height at which the proof was retrieved
         type: object
         properties:
           revision_number:
@@ -52220,6 +52467,13 @@ definitions:
           RevisionHeight
 
           gets reset
+        title: >-
+          Height is a monotonically increasing data type
+
+          that can be compared against another Height for the purposes of
+          updating and
+
+          freezing clients
     title: |-
       QueryChannelClientStateResponse is the Response type for the
       Query/QueryChannelClientState RPC method
@@ -52383,7 +52637,6 @@ definitions:
                 "@type": "type.googleapis.com/google.protobuf.Duration",
                 "value": "1.212s"
               }
-        title: consensus state associated with the channel
       client_id:
         type: string
         title: client ID associated with the consensus state
@@ -52392,7 +52645,6 @@ definitions:
         format: byte
         title: merkle proof of existence
       proof_height:
-        title: height at which the proof was retrieved
         type: object
         properties:
           revision_number:
@@ -52419,6 +52671,13 @@ definitions:
           RevisionHeight
 
           gets reset
+        title: >-
+          Height is a monotonically increasing data type
+
+          that can be compared against another Height for the purposes of
+          updating and
+
+          freezing clients
     title: |-
       QueryChannelClientStateResponse is the Response type for the
       Query/QueryChannelClientState RPC method
@@ -52426,11 +52685,9 @@ definitions:
     type: object
     properties:
       channel:
-        title: channel associated with the request identifiers
         type: object
         properties:
           state:
-            title: current state of the channel end
             type: string
             enum:
               - STATE_UNINITIALIZED_UNSPECIFIED
@@ -52451,7 +52708,6 @@ definitions:
                - STATE_CLOSED: A channel has been closed and can no longer be used to send or receive
               packets.
           ordering:
-            title: whether the channel is ordered or unordered
             type: string
             enum:
               - ORDER_NONE_UNSPECIFIED
@@ -52463,8 +52719,8 @@ definitions:
                - ORDER_UNORDERED: packets can be delivered in any order, which may differ from the order in
               which they were sent.
                - ORDER_ORDERED: packets are delivered exactly in the order which they were sent
+            title: Order defines if a channel is ORDERED or UNORDERED
           counterparty:
-            title: counterparty channel end
             type: object
             properties:
               port_id:
@@ -52475,6 +52731,7 @@ definitions:
               channel_id:
                 type: string
                 title: channel end on the counterparty chain
+            title: Counterparty defines a channel end counterparty
           connection_hops:
             type: array
             items:
@@ -52499,7 +52756,6 @@ definitions:
         format: byte
         title: merkle proof of existence
       proof_height:
-        title: height at which the proof was retrieved
         type: object
         properties:
           revision_number:
@@ -52526,6 +52782,13 @@ definitions:
           RevisionHeight
 
           gets reset
+        title: >-
+          Height is a monotonically increasing data type
+
+          that can be compared against another Height for the purposes of
+          updating and
+
+          freezing clients
     description: >-
       QueryChannelResponse is the response type for the Query/Channel RPC
       method.
@@ -52542,7 +52805,6 @@ definitions:
           type: object
           properties:
             state:
-              title: current state of the channel end
               type: string
               enum:
                 - STATE_UNINITIALIZED_UNSPECIFIED
@@ -52563,7 +52825,6 @@ definitions:
                  - STATE_CLOSED: A channel has been closed and can no longer be used to send or receive
                 packets.
             ordering:
-              title: whether the channel is ordered or unordered
               type: string
               enum:
                 - ORDER_NONE_UNSPECIFIED
@@ -52575,8 +52836,8 @@ definitions:
                  - ORDER_UNORDERED: packets can be delivered in any order, which may differ from the order in
                 which they were sent.
                  - ORDER_ORDERED: packets are delivered exactly in the order which they were sent
+              title: Order defines if a channel is ORDERED or UNORDERED
             counterparty:
-              title: counterparty channel end
               type: object
               properties:
                 port_id:
@@ -52587,6 +52848,7 @@ definitions:
                 channel_id:
                   type: string
                   title: channel end on the counterparty chain
+              title: Counterparty defines a channel end counterparty
             connection_hops:
               type: array
               items:
@@ -52612,7 +52874,6 @@ definitions:
             identifier fields.
         description: list of stored channels of the chain.
       pagination:
-        title: pagination response
         type: object
         properties:
           next_key:
@@ -52638,7 +52899,6 @@ definitions:
                    PageResponse page = 2;
            }
       height:
-        title: query block height
         type: object
         properties:
           revision_number:
@@ -52665,6 +52925,13 @@ definitions:
           RevisionHeight
 
           gets reset
+        title: >-
+          Height is a monotonically increasing data type
+
+          that can be compared against another Height for the purposes of
+          updating and
+
+          freezing clients
     description: >-
       QueryChannelsResponse is the response type for the Query/Channels RPC
       method.
@@ -52677,7 +52944,6 @@ definitions:
           type: object
           properties:
             state:
-              title: current state of the channel end
               type: string
               enum:
                 - STATE_UNINITIALIZED_UNSPECIFIED
@@ -52698,7 +52964,6 @@ definitions:
                  - STATE_CLOSED: A channel has been closed and can no longer be used to send or receive
                 packets.
             ordering:
-              title: whether the channel is ordered or unordered
               type: string
               enum:
                 - ORDER_NONE_UNSPECIFIED
@@ -52710,8 +52975,8 @@ definitions:
                  - ORDER_UNORDERED: packets can be delivered in any order, which may differ from the order in
                 which they were sent.
                  - ORDER_ORDERED: packets are delivered exactly in the order which they were sent
+              title: Order defines if a channel is ORDERED or UNORDERED
             counterparty:
-              title: counterparty channel end
               type: object
               properties:
                 port_id:
@@ -52722,6 +52987,7 @@ definitions:
                 channel_id:
                   type: string
                   title: channel end on the counterparty chain
+              title: Counterparty defines a channel end counterparty
             connection_hops:
               type: array
               items:
@@ -52747,7 +53013,6 @@ definitions:
             identifier fields.
         description: list of channels associated with a connection.
       pagination:
-        title: pagination response
         type: object
         properties:
           next_key:
@@ -52773,7 +53038,6 @@ definitions:
                    PageResponse page = 2;
            }
       height:
-        title: query block height
         type: object
         properties:
           revision_number:
@@ -52800,6 +53064,13 @@ definitions:
           RevisionHeight
 
           gets reset
+        title: >-
+          Height is a monotonically increasing data type
+
+          that can be compared against another Height for the purposes of
+          updating and
+
+          freezing clients
     title: |-
       QueryConnectionChannelsResponse is the Response type for the
       Query/QueryConnectionChannels RPC method
@@ -52815,7 +53086,6 @@ definitions:
         format: byte
         title: merkle proof of existence
       proof_height:
-        title: height at which the proof was retrieved
         type: object
         properties:
           revision_number:
@@ -52842,6 +53112,13 @@ definitions:
           RevisionHeight
 
           gets reset
+        title: >-
+          Height is a monotonically increasing data type
+
+          that can be compared against another Height for the purposes of
+          updating and
+
+          freezing clients
     title: |-
       QuerySequenceResponse is the request type for the
       Query/QueryNextSequenceReceiveResponse RPC method
@@ -52857,7 +53134,6 @@ definitions:
         format: byte
         title: merkle proof of existence
       proof_height:
-        title: height at which the proof was retrieved
         type: object
         properties:
           revision_number:
@@ -52884,6 +53160,13 @@ definitions:
           RevisionHeight
 
           gets reset
+        title: >-
+          Height is a monotonically increasing data type
+
+          that can be compared against another Height for the purposes of
+          updating and
+
+          freezing clients
     title: |-
       QueryPacketAcknowledgementResponse defines the client query response for a
       packet which also includes a proof and the height from which the
@@ -52920,7 +53203,6 @@ definitions:
 
             state as a commitment, acknowledgement, or a receipt.
       pagination:
-        title: pagination response
         type: object
         properties:
           next_key:
@@ -52946,7 +53228,6 @@ definitions:
                    PageResponse page = 2;
            }
       height:
-        title: query block height
         type: object
         properties:
           revision_number:
@@ -52973,6 +53254,13 @@ definitions:
           RevisionHeight
 
           gets reset
+        title: >-
+          Height is a monotonically increasing data type
+
+          that can be compared against another Height for the purposes of
+          updating and
+
+          freezing clients
     title: |-
       QueryPacketAcknowledgemetsResponse is the request type for the
       Query/QueryPacketAcknowledgements RPC method
@@ -52988,7 +53276,6 @@ definitions:
         format: byte
         title: merkle proof of existence
       proof_height:
-        title: height at which the proof was retrieved
         type: object
         properties:
           revision_number:
@@ -53015,6 +53302,13 @@ definitions:
           RevisionHeight
 
           gets reset
+        title: >-
+          Height is a monotonically increasing data type
+
+          that can be compared against another Height for the purposes of
+          updating and
+
+          freezing clients
     title: >-
       QueryPacketCommitmentResponse defines the client query response for a
       packet
@@ -53054,7 +53348,6 @@ definitions:
 
             state as a commitment, acknowledgement, or a receipt.
       pagination:
-        title: pagination response
         type: object
         properties:
           next_key:
@@ -53080,7 +53373,6 @@ definitions:
                    PageResponse page = 2;
            }
       height:
-        title: query block height
         type: object
         properties:
           revision_number:
@@ -53107,6 +53399,13 @@ definitions:
           RevisionHeight
 
           gets reset
+        title: >-
+          Height is a monotonically increasing data type
+
+          that can be compared against another Height for the purposes of
+          updating and
+
+          freezing clients
     title: |-
       QueryPacketCommitmentsResponse is the request type for the
       Query/QueryPacketCommitments RPC method
@@ -53121,7 +53420,6 @@ definitions:
         format: byte
         title: merkle proof of existence
       proof_height:
-        title: height at which the proof was retrieved
         type: object
         properties:
           revision_number:
@@ -53148,6 +53446,13 @@ definitions:
           RevisionHeight
 
           gets reset
+        title: >-
+          Height is a monotonically increasing data type
+
+          that can be compared against another Height for the purposes of
+          updating and
+
+          freezing clients
     title: >-
       QueryPacketReceiptResponse defines the client query response for a packet
 
@@ -53165,7 +53470,6 @@ definitions:
           format: uint64
         title: list of unreceived acknowledgement sequences
       height:
-        title: query block height
         type: object
         properties:
           revision_number:
@@ -53192,6 +53496,13 @@ definitions:
           RevisionHeight
 
           gets reset
+        title: >-
+          Height is a monotonically increasing data type
+
+          that can be compared against another Height for the purposes of
+          updating and
+
+          freezing clients
     title: |-
       QueryUnreceivedAcksResponse is the response type for the
       Query/UnreceivedAcks RPC method
@@ -53205,7 +53516,6 @@ definitions:
           format: uint64
         title: list of unreceived packet sequences
       height:
-        title: query block height
         type: object
         properties:
           revision_number:
@@ -53232,6 +53542,13 @@ definitions:
           RevisionHeight
 
           gets reset
+        title: >-
+          Height is a monotonically increasing data type
+
+          that can be compared against another Height for the purposes of
+          updating and
+
+          freezing clients
     title: |-
       QueryUnreceivedPacketsResponse is the response type for the
       Query/UnreceivedPacketCommitments RPC method
@@ -55879,7 +56196,6 @@ definitions:
     type: object
     properties:
       distribution_proportions:
-        title: distribution_proportions defines the proportion of the minted denom
         type: object
         properties:
           nft_incentives:
@@ -55900,13 +56216,9 @@ definitions:
     type: object
     properties:
       params:
-        description: params defines the parameters of the module.
         type: object
         properties:
           distribution_proportions:
-            title: >-
-              distribution_proportions defines the proportion of the minted
-              denom
             type: object
             properties:
               nft_incentives:
@@ -55935,9 +56247,9 @@ definitions:
     type: string
     enum:
       - ActionInitialClaim
-      - ActionSwap
-      - ActionVote
       - ActionDelegateStake
+      - ActionVote
+      - ActionSwap
     default: ActionInitialClaim
   mun.claim.v1beta1.ClaimAuthorization:
     type: object
@@ -55948,9 +56260,9 @@ definitions:
         type: string
         enum:
           - ActionInitialClaim
-          - ActionSwap
-          - ActionVote
           - ActionDelegateStake
+          - ActionVote
+          - ActionSwap
         default: ActionInitialClaim
   mun.claim.v1beta1.ClaimRecord:
     type: object
@@ -55973,6 +56285,13 @@ definitions:
             NOTE: The amount field is an Int which implements the custom method
             signatures required by gogoproto.
         title: total initial claimable amount for the user
+      action_ready:
+        type: array
+        items:
+          type: boolean
+        title: |-
+          true if action is ready to claim
+          index of bool in array refers to action enum #
       action_completed:
         type: array
         items:
@@ -56044,9 +56363,9 @@ definitions:
               type: string
               enum:
                 - ActionInitialClaim
-                - ActionSwap
-                - ActionVote
                 - ActionDelegateStake
+                - ActionVote
+                - ActionSwap
               default: ActionInitialClaim
         title: list of contracts and their allowed claim actions
     description: Params defines the claim module's parameters.
@@ -56077,6 +56396,13 @@ definitions:
 
                 signatures required by gogoproto.
             title: total initial claimable amount for the user
+          action_ready:
+            type: array
+            items:
+              type: boolean
+            title: |-
+              true if action is ready to claim
+              index of bool in array refers to action enum #
           action_completed:
             type: array
             items:
@@ -56124,7 +56450,6 @@ definitions:
     type: object
     properties:
       params:
-        description: params defines the parameters of the module.
         type: object
         properties:
           airdrop_enabled:
@@ -56150,11 +56475,12 @@ definitions:
                   type: string
                   enum:
                     - ActionInitialClaim
-                    - ActionSwap
-                    - ActionVote
                     - ActionDelegateStake
+                    - ActionVote
+                    - ActionSwap
                   default: ActionInitialClaim
             title: list of contracts and their allowed claim actions
+        description: Params defines the claim module's parameters.
     description: QueryParamsResponse is the response type for the Query/Params RPC method.
   mun.claim.v1beta1.QueryTotalClaimableResponse:
     type: object
@@ -56176,13 +56502,57 @@ definitions:
   mun.mun.Params:
     type: object
     description: Params defines the parameters for the module.
+  mun.mun.QueryAllVersionResponse:
+    type: object
+    properties:
+      version:
+        type: array
+        items:
+          type: object
+          properties:
+            index:
+              type: string
+            version:
+              type: string
+      pagination:
+        type: object
+        properties:
+          next_key:
+            type: string
+            format: byte
+            title: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
+
+              was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
   mun.mun.QueryParamsResponse:
     type: object
     properties:
       params:
-        description: params holds all the parameters of this module.
         type: object
+        description: Params defines the parameters for the module.
     description: QueryParamsResponse is response type for the Query/Params RPC method.
+  mun.mun.Version:
+    type: object
+    properties:
+      index:
+        type: string
+      version:
+        type: string
   tendermint.spn.claim.ClaimRecord:
     type: object
     properties:
@@ -56337,8 +56707,8 @@ definitions:
     type: object
     properties:
       params:
-        description: params holds all the parameters of this module.
         type: object
+        description: Params defines the parameters for the module.
     description: QueryParamsResponse is response type for the Query/Params RPC method.
   tendermint.spn.monitoringp.ConnectionChannelID:
     type: object

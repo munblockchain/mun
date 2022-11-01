@@ -13,3 +13,160 @@
     box-sizing: border-box;
   }
 }
+
+:root {
+  --text-color-primary: #111111;
+  --text-color-secondary: rgba(0, 0, 0, 0.667);
+  --text-color-inactive: rgba(0, 0, 0, 0.33);
+  --background-color-primary: #FFF;
+  --background-color-secondary: #000;
+  --background-color-lila: #ac61d7;
+  --background-color-input: rgba(0, 0, 0, 0.03);
+  --background-color-input-hover: rgba(0, 0, 0, 0.07);
+
+  --shadow-color-primary: rgba(0, 0, 0, 0.07);
+
+  --button-primary-bg-color: #111111;
+  --button-primary-text-color: #FFF;
+  --button-secondary-bg-color: #FFF;
+  --button-secondary-text-color: #111111;
+  --button-disabled-bg-color: rgba(17, 17, 17, 0.04);
+  --button-disabled-text-color: rgba(17, 17, 17, 0.4);
+
+  --element-size: 4rem;
+}
+
+:root.dark-theme {
+  --text-color-primary: #FFF;
+  --text-color-secondary: rgba(255, 255, 255, 0.667);
+  --text-color-inactive: rgba(255, 255, 255, 0.33);
+  --background-color-primary: #111111;
+  --background-color-secondary: #000;
+  --background-color-input: rgba(255, 255, 255, 0.03);
+  --background-color-input-hover: rgba(255, 255, 255, 0.07);
+
+  --shadow-color-primary: rgba(255, 255, 255, 0.07);
+
+  --button-primary-bg-color: #FFF;
+  --button-primary-text-color: #111;
+  --button-secondary-bg-color: #111;
+  --button-secondary-text-color: #FFF;
+  --button-disabled-bg-color: rgba(238, 238, 238, 0.04);
+  --button-disabled-text-color: rgba(238, 238, 238, 0.4);
+}
+
+.dark-theme {
+  background-color: $black;
+}
+
+.dark-theme body{
+  color: $white;
+}
+
+.light-theme body{
+  color: $black;
+}
+
+.light-theme {
+  background-color: $white;
+}
+
+.dark-theme .navbar-wrapper {
+  background-color: $black;
+}
+.light-theme .navbar-wrapper {
+  background-color: $white;
+}
+
+.dark-theme .description-grey {
+  color: $white;
+}
+
+.light-theme .description-grey {
+  color: rgba(0, 0, 0, 0.667);
+}
+
+.light-theme .sp-nav-link {
+  color: rgba(0, 0, 0, 0.667);
+  &.selected {
+    color: $black;
+  }
+}
+
+.dark-theme .sp-nav-link {
+  color: $white;
+  &.selected {
+    color: $white;
+  }
+}
+
+.light-theme .link-active,
+.light-theme .card-item {
+  color: $black;
+}
+
+.dark-theme .link-active,
+.dark-theme .card-item {
+  color: $white;
+}
+
+.light-theme .sp-box {
+  background: white;
+  border-radius: 1.2rem;
+  padding: 2rem;
+  font-size: 1.4rem;
+
+  .sp-box-header {
+    opacity: 0.4;
+    font-weight: 600;
+    font-size: 1.3rem;
+    display: flex;
+    line-height: 2.2rem;
+  }
+}
+.dark-theme .sp-box {
+  background: #222;
+  border-radius: 1.2rem;
+  padding: 2rem;
+  font-size: 1.4rem;
+
+  .sp-box-header {
+    opacity: 0.4;
+    font-weight: 600;
+    font-size: 1.3rem;
+    display: flex;
+    line-height: 2.2rem;
+  }
+
+}
+.dark-theme .account-dropdown {
+  position: fixed;
+  box-sizing: border-box;
+  top: 7rem;
+  right: 2rem;
+  z-index: 90;
+  background : #222;
+  height: auto;
+  padding: 2.8rem;
+  max-width: 320px;
+  width: 100%;
+  box-shadow: 40px 64px 128px -8px rgb(0 0 0 / 14%);
+  border-radius: 10px;
+}
+.dark-theme .modal-header {
+  h3 {
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 21px;
+    line-height: 133%;
+    /* identical to box height, or 28px */
+
+    text-align: center;
+    letter-spacing: -0.007em;
+
+    /* light/text */
+
+    color: #ffffff;
+  }
+}

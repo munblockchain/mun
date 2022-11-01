@@ -57,7 +57,7 @@ export default function ({ $s }: Params): Response {
         bech32PrefixConsPub: addrPrefix + 'valconspub'
       }
 
-      let currencies = tokens.supply.map((x: Amount) => {
+      let currencies = tokens.supply.filter((a: Amount) => {return a.denom == coinDenomMin}).map((x: Amount) => {
         const y: AmountWithMeta = {
           amount: '0',
           denom: '',
@@ -71,7 +71,7 @@ export default function ({ $s }: Params): Response {
         return y
       })
 
-      let feeCurrencies = tokens.supply.map((x: Amount) => {
+      let feeCurrencies = tokens.supply.filter((a: Amount) => {return a.denom == coinDenomMin}).map((x: Amount) => {
         const y: AmountWithMeta = {
           amount: '0',
           denom: '',

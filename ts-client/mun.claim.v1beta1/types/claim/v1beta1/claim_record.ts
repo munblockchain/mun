@@ -6,9 +6,9 @@ export const protobufPackage = "mun.claim.v1beta1";
 
 export enum Action {
   ActionInitialClaim = 0,
-  ActionSwap = 1,
+  ActionDelegateStake = 1,
   ActionVote = 2,
-  ActionDelegateStake = 3,
+  ActionSwap = 3,
   UNRECOGNIZED = -1,
 }
 
@@ -18,14 +18,14 @@ export function actionFromJSON(object: any): Action {
     case "ActionInitialClaim":
       return Action.ActionInitialClaim;
     case 1:
-    case "ActionSwap":
-      return Action.ActionSwap;
+    case "ActionDelegateStake":
+      return Action.ActionDelegateStake;
     case 2:
     case "ActionVote":
       return Action.ActionVote;
     case 3:
-    case "ActionDelegateStake":
-      return Action.ActionDelegateStake;
+    case "ActionSwap":
+      return Action.ActionSwap;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -37,12 +37,12 @@ export function actionToJSON(object: Action): string {
   switch (object) {
     case Action.ActionInitialClaim:
       return "ActionInitialClaim";
-    case Action.ActionSwap:
-      return "ActionSwap";
-    case Action.ActionVote:
-      return "ActionVote";
     case Action.ActionDelegateStake:
       return "ActionDelegateStake";
+    case Action.ActionVote:
+      return "ActionVote";
+    case Action.ActionSwap:
+      return "ActionSwap";
     default:
       return "UNKNOWN";
   }
@@ -54,13 +54,22 @@ export interface ClaimRecord {
   /** total initial claimable amount for the user */
   initialClaimableAmount: Coin[];
   /**
+   * true if action is ready to claim
+   * index of bool in array refers to action enum #
+   */
+  actionReady: boolean[];
+  /**
    * true if action is completed
    * index of bool in array refers to action enum #
    */
   actionCompleted: boolean[];
 }
 
-const baseClaimRecord: object = { address: "", actionCompleted: false };
+const baseClaimRecord: object = {
+  address: "",
+  actionReady: false,
+  actionCompleted: false,
+};
 
 export const ClaimRecord = {
   encode(message: ClaimRecord, writer: Writer = Writer.create()): Writer {
@@ -71,6 +80,11 @@ export const ClaimRecord = {
       Coin.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     writer.uint32(26).fork();
+    for (const v of message.actionReady) {
+      writer.bool(v);
+    }
+    writer.ldelim();
+    writer.uint32(34).fork();
     for (const v of message.actionCompleted) {
       writer.bool(v);
     }
@@ -83,6 +97,7 @@ export const ClaimRecord = {
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseClaimRecord } as ClaimRecord;
     message.initialClaimableAmount = [];
+    message.actionReady = [];
     message.actionCompleted = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -96,6 +111,16 @@ export const ClaimRecord = {
           );
           break;
         case 3:
+          if ((tag & 7) === 2) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.actionReady.push(reader.bool());
+            }
+          } else {
+            message.actionReady.push(reader.bool());
+          }
+          break;
+        case 4:
           if ((tag & 7) === 2) {
             const end2 = reader.uint32() + reader.pos;
             while (reader.pos < end2) {
@@ -116,6 +141,7 @@ export const ClaimRecord = {
   fromJSON(object: any): ClaimRecord {
     const message = { ...baseClaimRecord } as ClaimRecord;
     message.initialClaimableAmount = [];
+    message.actionReady = [];
     message.actionCompleted = [];
     if (object.address !== undefined && object.address !== null) {
       message.address = String(object.address);
@@ -128,6 +154,11 @@ export const ClaimRecord = {
     ) {
       for (const e of object.initialClaimableAmount) {
         message.initialClaimableAmount.push(Coin.fromJSON(e));
+      }
+    }
+    if (object.actionReady !== undefined && object.actionReady !== null) {
+      for (const e of object.actionReady) {
+        message.actionReady.push(Boolean(e));
       }
     }
     if (
@@ -151,6 +182,11 @@ export const ClaimRecord = {
     } else {
       obj.initialClaimableAmount = [];
     }
+    if (message.actionReady) {
+      obj.actionReady = message.actionReady.map((e) => e);
+    } else {
+      obj.actionReady = [];
+    }
     if (message.actionCompleted) {
       obj.actionCompleted = message.actionCompleted.map((e) => e);
     } else {
@@ -162,6 +198,7 @@ export const ClaimRecord = {
   fromPartial(object: DeepPartial<ClaimRecord>): ClaimRecord {
     const message = { ...baseClaimRecord } as ClaimRecord;
     message.initialClaimableAmount = [];
+    message.actionReady = [];
     message.actionCompleted = [];
     if (object.address !== undefined && object.address !== null) {
       message.address = object.address;
@@ -174,6 +211,11 @@ export const ClaimRecord = {
     ) {
       for (const e of object.initialClaimableAmount) {
         message.initialClaimableAmount.push(Coin.fromPartial(e));
+      }
+    }
+    if (object.actionReady !== undefined && object.actionReady !== null) {
+      for (const e of object.actionReady) {
+        message.actionReady.push(e);
       }
     }
     if (

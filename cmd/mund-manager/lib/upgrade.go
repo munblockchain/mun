@@ -74,6 +74,7 @@ func DoUpgrade(cfg *Config, info *UpgradeInfo) error {
 		// we have the binary - do it
 		return cfg.SetCurrentUpgrade(info.Name)
 	}
+
 	// if auto-download is disabled, we fail
 	if !cfg.AllowDownloadBinaries {
 		return fmt.Errorf("binary not present, downloading disabled: %w", err)

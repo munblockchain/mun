@@ -91,6 +91,40 @@ func (k Keeper) GetClaimRecord(ctx sdk.Context, addr sdk.AccAddress) (types.Clai
 }
 
 // GetClaimable returns claimable amount for a specific action done by an address
+func (k Keeper) SetClaimableActionReady(ctx sdk.Context, addr sdk.AccAddress, action types.Action) bool {
+	claimRecord, err := k.GetClaimRecord(ctx, addr)
+
+	// if occurs error in unmarshal
+	if err != nil {
+		return false
+	}
+
+	// Add record
+	if claimRecord.Address == "" {
+		claimCoins, err := sdk.ParseCoinsNormalized(types.InitialClaimAmount)
+		if err != nil {
+			return false
+		}
+
+		// Create a new record
+		claimRecord = types.ClaimRecord{
+			Address:                addr.String(),
+			InitialClaimableAmount: claimCoins,
+			ActionReady:            make([]bool, 4),
+			ActionCompleted:        make([]bool, 4),
+		}
+	}
+
+	// Set claimable status to true
+	claimRecord.ActionReady[action] = true
+
+	// Create a new claim record with initial claim amount
+	k.SetClaimRecord(ctx, claimRecord)
+
+	return true
+}
+
+// GetClaimable returns claimable amount for a specific action done by an address
 func (k Keeper) GetClaimableAmountForAction(ctx sdk.Context, addr sdk.AccAddress, action types.Action) (sdk.Coins, error) {
 	claimRecord, err := k.GetClaimRecord(ctx, addr)
 
@@ -110,6 +144,7 @@ func (k Keeper) GetClaimableAmountForAction(ctx sdk.Context, addr sdk.AccAddress
 		claimRecord = types.ClaimRecord{
 			Address:                addr.String(),
 			InitialClaimableAmount: claimCoins,
+			ActionReady:            make([]bool, 4),
 			ActionCompleted:        make([]bool, 4),
 		}
 
@@ -123,6 +158,16 @@ func (k Keeper) GetClaimableAmountForAction(ctx sdk.Context, addr sdk.AccAddress
 
 	// if action already completed, nothing is claimable
 	if claimRecord.ActionCompleted[action] {
+		return sdk.Coins{}, nil
+	}
+
+	// if previous action not completed, nothing is claimable
+	if action != types.ActionInitialClaim && !claimRecord.ActionCompleted[action-1] {
+		return sdk.Coins{}, nil
+	}
+
+	// if action is not ready, nothing is claimable
+	if action != types.ActionInitialClaim && action != types.ActionSwap && !claimRecord.ActionReady[action] {
 		return sdk.Coins{}, nil
 	}
 

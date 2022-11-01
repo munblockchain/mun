@@ -175,8 +175,8 @@ export default defineComponent({
     displayLimit: {
       type: Number,
       default: 3,
-      required: false,
-    },
+      required: false
+    }
   },
 
   setup(props) {
@@ -373,7 +373,7 @@ $avatar-offset: 32 + 16;
       list-style: none;
       display: inline-flex;
       font-size: 16px;
-      color: rgba(0, 0, 0, 0.667);
+      color: var(--text-color-secondary);
     }
 
     &--object {
@@ -407,7 +407,7 @@ $avatar-offset: 32 + 16;
     font-weight: normal;
     font-size: 13px;
     line-height: 153.8%;
-    color: rgba(0, 0, 0, 0.667);
+    color: var(--text-color-secondary);
 
     td {
       padding-top: 22px;
@@ -435,7 +435,7 @@ $avatar-offset: 32 + 16;
         font-style: normal;
         font-weight: normal;
         font-size: 13px;
-        color: rgba(0, 0, 0, 0.667);
+        color: var(--text-color-secondary);
       }
     }
   }
@@ -481,10 +481,10 @@ $avatar-offset: 32 + 16;
   /* identical to box height, or 36px */
 
   letter-spacing: -0.02em;
-  font-feature-settings: "zero";
+  font-feature-settings: 'zero';
 
-  color: #000000;
   margin-top: 0;
+  color: var(--text-color-primary);
 }
 
 .input {
@@ -515,10 +515,10 @@ $avatar-offset: 32 + 16;
   left: 0;
   right: 0;
   bottom: 0;
-  background: #ffffff;
-  box-shadow: 3px 9px 32px -4px rgba(0, 0, 0, 0.07);
+  background: var(--background-color-primary);
+  box-shadow: 3px 9px 32px -4px var(--shadow-color-primary);
   border-radius: 56px;
-  color: #000000;
+  color: var(--text-color-primary);
   font-weight: 500;
   font-size: 13px;
   position: absolute;
@@ -528,7 +528,7 @@ $avatar-offset: 32 + 16;
 
 .no-result-label {
   font-size: 16px;
-  color: rgba(0, 0, 0, 0.667);
+  color: var(--text-color-secondary);
   margin-top: 22px;
 }
 

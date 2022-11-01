@@ -5,6 +5,7 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "mun/params.proto";
+import "mun/version.proto";
 // this line is used by starport scaffolding # 1
 
 option go_package = "mun/x/mun/types";
@@ -15,7 +16,13 @@ service Query {
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/mun/mun/params";
   }
-  // this line is used by starport scaffolding # 2
+
+	// Queries a list of Version items.
+	rpc VersionAll(QueryAllVersionRequest) returns (QueryAllVersionResponse) {
+		option (google.api.http).get = "/mun/mun/version";
+	}
+
+// this line is used by starport scaffolding # 2
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -25,6 +32,24 @@ message QueryParamsRequest {}
 message QueryParamsResponse {
   // params holds all the parameters of this module.
   Params params = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetVersionRequest {
+	  string index = 1;
+
+}
+
+message QueryGetVersionResponse {
+	Version version = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllVersionRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllVersionResponse {
+	repeated Version version = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 // this line is used by starport scaffolding # 3

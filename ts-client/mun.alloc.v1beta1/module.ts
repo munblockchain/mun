@@ -7,17 +7,11 @@ import { msgTypes } from './registry';
 import { IgniteClient } from "../client"
 import { MissingWalletError } from "../helpers"
 import { Api } from "./rest";
-import { MsgCreateVestingAccount } from "./types/alloc/v1beta1/tx";
 import { MsgFundFairburnPool } from "./types/alloc/v1beta1/tx";
+import { MsgCreateVestingAccount } from "./types/alloc/v1beta1/tx";
 
 
-export { MsgCreateVestingAccount, MsgFundFairburnPool };
-
-type sendMsgCreateVestingAccountParams = {
-  value: MsgCreateVestingAccount,
-  fee?: StdFee,
-  memo?: string
-};
+export { MsgFundFairburnPool, MsgCreateVestingAccount };
 
 type sendMsgFundFairburnPoolParams = {
   value: MsgFundFairburnPool,
@@ -25,13 +19,19 @@ type sendMsgFundFairburnPoolParams = {
   memo?: string
 };
 
-
-type msgCreateVestingAccountParams = {
+type sendMsgCreateVestingAccountParams = {
   value: MsgCreateVestingAccount,
+  fee?: StdFee,
+  memo?: string
 };
+
 
 type msgFundFairburnPoolParams = {
   value: MsgFundFairburnPool,
+};
+
+type msgCreateVestingAccountParams = {
+  value: MsgCreateVestingAccount,
 };
 
 
@@ -52,20 +52,6 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 
   return {
 		
-		async sendMsgCreateVestingAccount({ value, fee, memo }: sendMsgCreateVestingAccountParams): Promise<DeliverTxResponse> {
-			if (!signer) {
-					throw new Error('TxClient:sendMsgCreateVestingAccount: Unable to sign Tx. Signer is not present.')
-			}
-			try {			
-				const { address } = (await signer.getAccounts())[0]; 
-				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
-				let msg = this.msgCreateVestingAccount({ value: MsgCreateVestingAccount.fromPartial(value) })
-				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
-			} catch (e: any) {
-				throw new Error('TxClient:sendMsgCreateVestingAccount: Could not broadcast Tx: '+ e.message)
-			}
-		},
-		
 		async sendMsgFundFairburnPool({ value, fee, memo }: sendMsgFundFairburnPoolParams): Promise<DeliverTxResponse> {
 			if (!signer) {
 					throw new Error('TxClient:sendMsgFundFairburnPool: Unable to sign Tx. Signer is not present.')
@@ -80,20 +66,34 @@ export const txClient = ({ signer, prefix, addr }: TxClientOptions = { addr: "ht
 			}
 		},
 		
-		
-		msgCreateVestingAccount({ value }: msgCreateVestingAccountParams): EncodeObject {
-			try {
-				return { typeUrl: "/mun.alloc.v1beta1.MsgCreateVestingAccount", value: MsgCreateVestingAccount.fromPartial( value ) }  
+		async sendMsgCreateVestingAccount({ value, fee, memo }: sendMsgCreateVestingAccountParams): Promise<DeliverTxResponse> {
+			if (!signer) {
+					throw new Error('TxClient:sendMsgCreateVestingAccount: Unable to sign Tx. Signer is not present.')
+			}
+			try {			
+				const { address } = (await signer.getAccounts())[0]; 
+				const signingClient = await SigningStargateClient.connectWithSigner(addr,signer,{registry, prefix});
+				let msg = this.msgCreateVestingAccount({ value: MsgCreateVestingAccount.fromPartial(value) })
+				return await signingClient.signAndBroadcast(address, [msg], fee ? fee : defaultFee, memo)
 			} catch (e: any) {
-				throw new Error('TxClient:MsgCreateVestingAccount: Could not create message: ' + e.message)
+				throw new Error('TxClient:sendMsgCreateVestingAccount: Could not broadcast Tx: '+ e.message)
 			}
 		},
+		
 		
 		msgFundFairburnPool({ value }: msgFundFairburnPoolParams): EncodeObject {
 			try {
 				return { typeUrl: "/mun.alloc.v1beta1.MsgFundFairburnPool", value: MsgFundFairburnPool.fromPartial( value ) }  
 			} catch (e: any) {
 				throw new Error('TxClient:MsgFundFairburnPool: Could not create message: ' + e.message)
+			}
+		},
+		
+		msgCreateVestingAccount({ value }: msgCreateVestingAccountParams): EncodeObject {
+			try {
+				return { typeUrl: "/mun.alloc.v1beta1.MsgCreateVestingAccount", value: MsgCreateVestingAccount.fromPartial( value ) }  
+			} catch (e: any) {
+				throw new Error('TxClient:MsgCreateVestingAccount: Could not create message: ' + e.message)
 			}
 		},
 		

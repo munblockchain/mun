@@ -9,9 +9,9 @@ import (
 )
 
 func (k Keeper) AfterProposalVote(ctx sdk.Context, proposalID uint64, voterAddr sdk.AccAddress) {
-	_, err := k.ClaimCoinsForAction(ctx, voterAddr, types.ActionVote)
-	if err != nil {
-		panic(err.Error())
+	ret := k.SetClaimableActionReady(ctx, voterAddr, types.ActionVote)
+	if !ret {
+		panic("err.Error()")
 	}
 }
 
@@ -20,9 +20,9 @@ func (k Keeper) AfterDelegationModified(ctx sdk.Context, delAddr sdk.AccAddress,
 	if ctx.BlockHeight() <= 1 {
 		return
 	}
-	_, err := k.ClaimCoinsForAction(ctx, delAddr, types.ActionDelegateStake)
-	if err != nil {
-		panic(err.Error())
+	ret := k.SetClaimableActionReady(ctx, delAddr, types.ActionDelegateStake)
+	if !ret {
+		panic("err.Error()")
 	}
 }
 
