@@ -34,7 +34,7 @@ go version
 
 ## Clone repository
 ```
-git clone https://github.com/bitxat/mun
+git clone https://github.com/munblockchain/mun
 cd mun
 ```
 
@@ -73,13 +73,15 @@ curl --tlsv1 https://node1.mun.money/genesis? | jq ".result.genesis" > ~/.mun/co
 ## Update seed in config.toml to make p2p connection
 ```
 nano ~/.mun/config/config.toml
-seeds = "d33c86f138b34301ab041ea1371b3d682f33af9c@node1.mun.money:26656"
+seeds = "6a08f2f76baed249d3e3c666aaef5884e4b1005c@167.71.0.38:26656"
 ```
+You can also try with this seed "9240277fca3bfa0c3b94efa60215ca10cf54f249@45.76.68.116:26656" or ask in our discord server.
 
 ## Replace stake to TMUN
 ```
 sed -i 's/stake/utmun/g' ~/.mun/config/genesis.json
 ```
+
 
 ## Create the service file "/etc/systemd/system/mund.service" with the following content
 ```
