@@ -134,7 +134,11 @@ func (k Keeper) GetClaimableAmountForAction(ctx sdk.Context, addr sdk.AccAddress
 	}
 
 	// Add record
-	if claimRecord.Address == "" {
+	if claimRecord.Address == "" ||
+		claimRecord.ActionReady == nil ||
+		claimRecord.ActionCompleted == nil ||
+		len(claimRecord.ActionReady) < 4 ||
+		len(claimRecord.ActionCompleted) < 4 {
 		claimCoins, err := sdk.ParseCoinsNormalized(types.InitialClaimAmount)
 		if err != nil {
 			return nil, err

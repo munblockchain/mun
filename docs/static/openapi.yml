@@ -32946,19 +32946,19 @@ paths:
 
                         signatures required by gogoproto.
                     title: total initial claimable amount for the user
-                  action_ready:
-                    type: array
-                    items:
-                      type: boolean
-                    title: |-
-                      true if action is ready to claim
-                      index of bool in array refers to action enum #
                   action_completed:
                     type: array
                     items:
                       type: boolean
                     title: |-
                       true if action is completed
+                      index of bool in array refers to action enum #
+                  action_ready:
+                    type: array
+                    items:
+                      type: boolean
+                    title: |-
+                      true if action is ready to claim
                       index of bool in array refers to action enum #
         default:
           description: An unexpected error response.
@@ -33106,6 +33106,7 @@ paths:
             type: object
             properties:
               params:
+                description: params defines the parameters of the module.
                 type: object
                 properties:
                   airdrop_enabled:
@@ -33136,7 +33137,6 @@ paths:
                             - ActionSwap
                           default: ActionInitialClaim
                     title: list of contracts and their allowed claim actions
-                description: Params defines the claim module's parameters.
             description: >-
               QueryParamsResponse is the response type for the Query/Params RPC
               method.
@@ -33222,8 +33222,8 @@ paths:
             type: object
             properties:
               params:
+                description: params holds all the parameters of this module.
                 type: object
-                description: Params defines the parameters for the module.
             description: >-
               QueryParamsResponse is response type for the Query/Params RPC
               method.
@@ -33531,16 +33531,6 @@ paths:
           in: query
           required: false
           type: boolean
-        - name: pagination.reverse
-          description: >-
-            reverse is set to true if results are to be returned in the
-            descending order.
-
-
-            Since: cosmos-sdk 0.43
-          in: query
-          required: false
-          type: boolean
       tags:
         - Query
   '/tendermint/spn/claim/claim_record/{address}':
@@ -33701,16 +33691,6 @@ paths:
             when key
 
             is set.
-          in: query
-          required: false
-          type: boolean
-        - name: pagination.reverse
-          description: >-
-            reverse is set to true if results are to be returned in the
-            descending order.
-
-
-            Since: cosmos-sdk 0.43
           in: query
           required: false
           type: boolean
@@ -56285,19 +56265,19 @@ definitions:
             NOTE: The amount field is an Int which implements the custom method
             signatures required by gogoproto.
         title: total initial claimable amount for the user
-      action_ready:
-        type: array
-        items:
-          type: boolean
-        title: |-
-          true if action is ready to claim
-          index of bool in array refers to action enum #
       action_completed:
         type: array
         items:
           type: boolean
         title: |-
           true if action is completed
+          index of bool in array refers to action enum #
+      action_ready:
+        type: array
+        items:
+          type: boolean
+        title: |-
+          true if action is ready to claim
           index of bool in array refers to action enum #
   mun.claim.v1beta1.MsgClaimForResponse:
     type: object
@@ -56396,19 +56376,19 @@ definitions:
 
                 signatures required by gogoproto.
             title: total initial claimable amount for the user
-          action_ready:
-            type: array
-            items:
-              type: boolean
-            title: |-
-              true if action is ready to claim
-              index of bool in array refers to action enum #
           action_completed:
             type: array
             items:
               type: boolean
             title: |-
               true if action is completed
+              index of bool in array refers to action enum #
+          action_ready:
+            type: array
+            items:
+              type: boolean
+            title: |-
+              true if action is ready to claim
               index of bool in array refers to action enum #
   mun.claim.v1beta1.QueryClaimableForActionResponse:
     type: object
@@ -56450,6 +56430,7 @@ definitions:
     type: object
     properties:
       params:
+        description: params defines the parameters of the module.
         type: object
         properties:
           airdrop_enabled:
@@ -56480,7 +56461,6 @@ definitions:
                     - ActionSwap
                   default: ActionInitialClaim
             title: list of contracts and their allowed claim actions
-        description: Params defines the claim module's parameters.
     description: QueryParamsResponse is the response type for the Query/Params RPC method.
   mun.claim.v1beta1.QueryTotalClaimableResponse:
     type: object
@@ -56543,8 +56523,8 @@ definitions:
     type: object
     properties:
       params:
+        description: params holds all the parameters of this module.
         type: object
-        description: Params defines the parameters for the module.
     description: QueryParamsResponse is response type for the Query/Params RPC method.
   mun.mun.Version:
     type: object

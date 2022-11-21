@@ -4,13 +4,13 @@ import { StdFee } from "@cosmjs/launchpad";
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { Registry, OfflineSigner, EncodeObject, DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
-import { MsgFundFairburnPool } from "./types/alloc/v1beta1/tx";
 import { MsgCreateVestingAccount } from "./types/alloc/v1beta1/tx";
+import { MsgFundFairburnPool } from "./types/alloc/v1beta1/tx";
 
 
 const types = [
-  ["/mun.alloc.v1beta1.MsgFundFairburnPool", MsgFundFairburnPool],
   ["/mun.alloc.v1beta1.MsgCreateVestingAccount", MsgCreateVestingAccount],
+  ["/mun.alloc.v1beta1.MsgFundFairburnPool", MsgFundFairburnPool],
   
 ];
 export const MissingWalletError = new Error("wallet is required");
@@ -43,8 +43,8 @@ const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions =
 
   return {
     signAndBroadcast: (msgs: EncodeObject[], { fee, memo }: SignAndBroadcastOptions = {fee: defaultFee, memo: ""}) => client.signAndBroadcast(address, msgs, fee,memo),
-    msgFundFairburnPool: (data: MsgFundFairburnPool): EncodeObject => ({ typeUrl: "/mun.alloc.v1beta1.MsgFundFairburnPool", value: MsgFundFairburnPool.fromPartial( data ) }),
     msgCreateVestingAccount: (data: MsgCreateVestingAccount): EncodeObject => ({ typeUrl: "/mun.alloc.v1beta1.MsgCreateVestingAccount", value: MsgCreateVestingAccount.fromPartial( data ) }),
+    msgFundFairburnPool: (data: MsgFundFairburnPool): EncodeObject => ({ typeUrl: "/mun.alloc.v1beta1.MsgFundFairburnPool", value: MsgFundFairburnPool.fromPartial( data ) }),
     
   };
 };

@@ -54,21 +54,21 @@ export interface ClaimRecord {
   /** total initial claimable amount for the user */
   initial_claimable_amount: Coin[];
   /**
-   * true if action is ready to claim
-   * index of bool in array refers to action enum #
-   */
-  action_ready: boolean[];
-  /**
    * true if action is completed
    * index of bool in array refers to action enum #
    */
   action_completed: boolean[];
+  /**
+   * true if action is ready to claim
+   * index of bool in array refers to action enum #
+   */
+  action_ready: boolean[];
 }
 
 const baseClaimRecord: object = {
   address: "",
-  action_ready: false,
   action_completed: false,
+  action_ready: false,
 };
 
 export const ClaimRecord = {
@@ -80,12 +80,12 @@ export const ClaimRecord = {
       Coin.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     writer.uint32(26).fork();
-    for (const v of message.action_ready) {
+    for (const v of message.action_completed) {
       writer.bool(v);
     }
     writer.ldelim();
     writer.uint32(34).fork();
-    for (const v of message.action_completed) {
+    for (const v of message.action_ready) {
       writer.bool(v);
     }
     writer.ldelim();
@@ -97,8 +97,8 @@ export const ClaimRecord = {
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseClaimRecord } as ClaimRecord;
     message.initial_claimable_amount = [];
-    message.action_ready = [];
     message.action_completed = [];
+    message.action_ready = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -114,20 +114,20 @@ export const ClaimRecord = {
           if ((tag & 7) === 2) {
             const end2 = reader.uint32() + reader.pos;
             while (reader.pos < end2) {
-              message.action_ready.push(reader.bool());
+              message.action_completed.push(reader.bool());
             }
           } else {
-            message.action_ready.push(reader.bool());
+            message.action_completed.push(reader.bool());
           }
           break;
         case 4:
           if ((tag & 7) === 2) {
             const end2 = reader.uint32() + reader.pos;
             while (reader.pos < end2) {
-              message.action_completed.push(reader.bool());
+              message.action_ready.push(reader.bool());
             }
           } else {
-            message.action_completed.push(reader.bool());
+            message.action_ready.push(reader.bool());
           }
           break;
         default:
@@ -141,8 +141,8 @@ export const ClaimRecord = {
   fromJSON(object: any): ClaimRecord {
     const message = { ...baseClaimRecord } as ClaimRecord;
     message.initial_claimable_amount = [];
-    message.action_ready = [];
     message.action_completed = [];
+    message.action_ready = [];
     if (object.address !== undefined && object.address !== null) {
       message.address = String(object.address);
     } else {
@@ -156,17 +156,17 @@ export const ClaimRecord = {
         message.initial_claimable_amount.push(Coin.fromJSON(e));
       }
     }
-    if (object.action_ready !== undefined && object.action_ready !== null) {
-      for (const e of object.action_ready) {
-        message.action_ready.push(Boolean(e));
-      }
-    }
     if (
       object.action_completed !== undefined &&
       object.action_completed !== null
     ) {
       for (const e of object.action_completed) {
         message.action_completed.push(Boolean(e));
+      }
+    }
+    if (object.action_ready !== undefined && object.action_ready !== null) {
+      for (const e of object.action_ready) {
+        message.action_ready.push(Boolean(e));
       }
     }
     return message;
@@ -182,15 +182,15 @@ export const ClaimRecord = {
     } else {
       obj.initial_claimable_amount = [];
     }
-    if (message.action_ready) {
-      obj.action_ready = message.action_ready.map((e) => e);
-    } else {
-      obj.action_ready = [];
-    }
     if (message.action_completed) {
       obj.action_completed = message.action_completed.map((e) => e);
     } else {
       obj.action_completed = [];
+    }
+    if (message.action_ready) {
+      obj.action_ready = message.action_ready.map((e) => e);
+    } else {
+      obj.action_ready = [];
     }
     return obj;
   },
@@ -198,8 +198,8 @@ export const ClaimRecord = {
   fromPartial(object: DeepPartial<ClaimRecord>): ClaimRecord {
     const message = { ...baseClaimRecord } as ClaimRecord;
     message.initial_claimable_amount = [];
-    message.action_ready = [];
     message.action_completed = [];
+    message.action_ready = [];
     if (object.address !== undefined && object.address !== null) {
       message.address = object.address;
     } else {
@@ -213,17 +213,17 @@ export const ClaimRecord = {
         message.initial_claimable_amount.push(Coin.fromPartial(e));
       }
     }
-    if (object.action_ready !== undefined && object.action_ready !== null) {
-      for (const e of object.action_ready) {
-        message.action_ready.push(e);
-      }
-    }
     if (
       object.action_completed !== undefined &&
       object.action_completed !== null
     ) {
       for (const e of object.action_completed) {
         message.action_completed.push(e);
+      }
+    }
+    if (object.action_ready !== undefined && object.action_ready !== null) {
+      for (const e of object.action_ready) {
+        message.action_ready.push(e);
       }
     }
     return message;

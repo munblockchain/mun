@@ -549,11 +549,15 @@ export default defineComponent({
       return valid
     })
     let ableToTx = computed<boolean>(
-      () =>
-        validTxAmount.value &&
+      () => {
+        const bValid = validTxAmount.value &&
         validReceiver.value &&
         validTxFees.value &&
         !!address.value
+        
+        return !bValid
+      }
+        
     )
 
     //watch

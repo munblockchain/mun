@@ -57,6 +57,7 @@ export interface V1Beta1Params {
  * QueryParamsResponse is the response type for the Query/Params RPC method.
  */
 export interface V1Beta1QueryParamsResponse {
+  /** params defines the parameters of the module. */
   params?: V1Beta1Params;
 }
 

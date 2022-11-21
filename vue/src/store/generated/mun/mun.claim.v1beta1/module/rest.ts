@@ -35,8 +35,8 @@ export interface V1Beta1ClaimAuthorization {
 export interface V1Beta1ClaimRecord {
   address?: string;
   initial_claimable_amount?: V1Beta1Coin[];
-  action_ready?: boolean[];
   action_completed?: boolean[];
+  action_ready?: boolean[];
 }
 
 /**
@@ -93,7 +93,7 @@ export interface V1Beta1QueryModuleAccountBalanceResponse {
  * QueryParamsResponse is the response type for the Query/Params RPC method.
  */
 export interface V1Beta1QueryParamsResponse {
-  /** Params defines the claim module's parameters. */
+  /** params defines the parameters of the module. */
   params?: V1Beta1Params;
 }
 
