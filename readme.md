@@ -34,7 +34,7 @@ go version
 
 ## Clone repository
 ```
-git clone https://github.com/bitxat/mun
+git clone https://github.com/munblockchain/mun
 cd mun
 ```
 
@@ -73,8 +73,10 @@ curl --tlsv1 https://node1.mun.money/genesis? | jq ".result.genesis" > ~/.mun/co
 ## Update seed in config.toml to make p2p connection
 ```
 nano ~/.mun/config/config.toml
-seeds = "d33c86f138b34301ab041ea1371b3d682f33af9c@node1.mun.money:26656"
+seeds = "XXXX"
 ```
+
+Please ask in our Discord for the seeds to replace XXXX! Join our Discord: https://discord.gg/mun
 
 ## Replace stake to TMUN
 ```
