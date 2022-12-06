@@ -1,4 +1,5 @@
-# How to join Munchain network
+# How to join MUN Blockchain 
+
 ## Infrastructure
 ```
 **Recommended configuration:**
@@ -6,9 +7,8 @@
 - Memory: 16GB
 - OS: Ubuntu 22.04 LTS
 - Allow all incoming connections from TCP port 26656 and 26657
-Static IP address
-- The recommended configuration from AWS is the equivalent of a t2.large machine
-with 300GB EBS attached storage.
+- Static IP address
+- Min. 500 GB HD (SSD)
 ```
 
 ## Installing prerequisites
@@ -57,7 +57,7 @@ cp $(which mund) ~/.mun/upgrade_manager/genesis/bin
 sudo cp $(which mund-manager) /usr/bin
 ```
 
-## Initialize the validator with a moniker name(Example moniker: solid-moon-rock)
+## Initialize the validator with a moniker name (Example moniker: solid-moon-rock)
 ```
 mund init [moniker_name] --chain-id testmun
 ```
@@ -66,6 +66,13 @@ mund init [moniker_name] --chain-id testmun
 ```
 mund keys add [wallet_name] --keyring-backend test
 ```
+
+## Important: Backup your priv_validator_key.json file (Make a copy and download it to your local machine) and also copy the contents to your password manager with:
+```
+cat $HOME/.mun/config/priv_validator_key.json
+```
+then copy the content starting with {... and ending with }} into your password manager 
+(You should use keepassxc.org)
 
 ## Fetch genesis.json from genesis node
 curl --tlsv1 https://node1.mun.money/genesis? | jq ".result.genesis" > ~/.mun/config/genesis.json
@@ -115,11 +122,13 @@ LimitNOFILE=4096
 [Install]
 WantedBy=multi-user.target
 ```
+
 **Tips**
 - How to get user and group name
 ```
 whoami
 ```
+
 - How to get DAEMON_HOME path
 ```
 cd ~/.mun
@@ -129,24 +138,30 @@ pwd
 ## Create log files and starts running the node
 ```
 make log-files
-
-sudo systemctl enable mund
-sudo systemctl start mund
 ```
 
-## Verify node is running properly
+## Enable and start mund node service
+```
+sudo systemctl enable mund
+sudo systemctl start mund && journalctl -u mund -f -o cat
+```
+
+## You can now logout from your ssh. You ccan verify if your node is running properly
 ```
 mund status
 ```
 
-## After buying TMUN, stake it to become a validator.
-**Tips**
-
 You should wait until the node gets fully synchronized with other nodes. You can cross check with the genesis node by visiting https://node1.mun.money/status and check the latest block height. You can also check your node status through this link http://[Your_Node_IP]:26657/status.
 
 
-**A transaction to become a validator by staking TMUN**
+## Once you are fully synced and after you got your 100K TMUN, stake it and become a validator:
 
 ```
-mund tx staking create-validator --from [wallet_name] --moniker [moniker_name] --pubkey $(mund tendermint show-validator) --chain-id testmun --keyring-backend test --amount 2000000000000000utmun --commission-max-change-rate 0.01 --commission-max-rate 0.2 --commission-rate 0.1 --min-self-delegation 1 --fees 20000utmun -y
+mund tx staking create-validator --from [wallet_name] --moniker [moniker_name] --pubkey $(mund tendermint show-validator) --chain-id testmun --keyring-backend test --amount 100000000000utmun --commission-max-change-rate 0.01 --commission-max-rate 0.2 --commission-rate 0.1 --min-self-delegation 1 --fees 20000utmun -y
+```
+
+
+## Useful command if your node is jailed (Please find out why you got jailed before running it)
+```
+mund tx slashing unjail --from XXXXX --chain-id testmun --keyring-backend test
 ```
