@@ -1,4 +1,4 @@
-VERSION := 2.0.2
+VERSION := 2.0.3
 COMMIT := $(shell git log -1 --format='%H')
 
 ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=mun \

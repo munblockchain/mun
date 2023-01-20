@@ -115,6 +115,11 @@ func (k Keeper) SetClaimableActionReady(ctx sdk.Context, addr sdk.AccAddress, ac
 		}
 	}
 
+	// Fallback process for earlier account that does not have 'action_ready' field
+	if len(claimRecord.ActionReady) == 0 {
+		claimRecord.ActionReady = make([]bool, 4)
+	}
+
 	// Set claimable status to true
 	claimRecord.ActionReady[action] = true
 
