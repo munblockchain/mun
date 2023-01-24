@@ -124,6 +124,9 @@ import (
 
 	munwasm "mun/internal/wasm"
 
+	v2 "mun/app/upgrade/v2_0_2"
+	"mun/app/upgrade/v2_0_3"
+
 	monitoringp "github.com/tendermint/spn/x/monitoringp"
 	monitoringpkeeper "github.com/tendermint/spn/x/monitoringp/keeper"
 	monitoringptypes "github.com/tendermint/spn/x/monitoringp/types"
@@ -265,7 +268,7 @@ func init() {
 }
 
 var (
-	Upgrades = []munupgrade.UpgradeMun{munupgrade.Upgrade}
+	Upgrades = []munupgrade.UpgradeMun{v2.Upgrade, v2_0_3.Upgrade}
 )
 
 // App extends an ABCI application, but with most of its parameters exported.

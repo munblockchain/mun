@@ -7,7 +7,7 @@ require (
 	github.com/CosmWasm/wasmvm v1.1.1
 	github.com/CosmosContracts/juno/v7 v7.0.0
 	github.com/armon/go-metrics v0.4.0
-	github.com/cosmos/cosmos-sdk v0.45.10
+	github.com/cosmos/cosmos-sdk v0.45.11
 	github.com/cosmos/ibc-go/v3 v3.4.0
 	github.com/gogo/protobuf v1.3.3
 	github.com/golang/protobuf v1.5.2
@@ -20,7 +20,7 @@ require (
 	github.com/spf13/cobra v1.6.0
 	github.com/stretchr/testify v1.8.0
 	github.com/tendermint/spn v0.2.1-0.20220610090138-44b136f042c4
-	github.com/tendermint/tendermint v0.34.24
+	github.com/tendermint/tendermint v0.34.23
 	github.com/tendermint/tm-db v0.6.7
 	google.golang.org/genproto v0.0.0-20221114212237-e4508ebdbee1
 	google.golang.org/grpc v1.50.1
