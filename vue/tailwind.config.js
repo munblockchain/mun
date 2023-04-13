@@ -1,20 +1,21 @@
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-  mode: 'jit',
-  purge: {
-    content: [
-      './pages/**/*.{js,ts,jsx,tsx}',
-      './components/**/*.{js,ts,jsx,tsx}',
-    ],
-    options: {
-      safelist: [/data-theme$/],
+  content: ["./src/**/*.{vue,html,js}"],
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        'lilac': '#ac61d7',
+        'lilac-hover': '#ad65e7',
+        'lilac-disabled': '#bc71e7',
+        'solitude': '#e9ecef',
+      },
+      borderWidth: {
+        '1': '1px'
+      }
     },
   },
-  darkMode: false, // or 'media' or 'class'
-  theme: {
-    extend: {},
-  },
-  variants: {
-    extend: {},
-  },
- 
+  plugins: [
+    require('@headlessui/tailwindcss')
+  ],
 }

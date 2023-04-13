@@ -1,9 +1,12 @@
 import { Client, registry, MissingWalletError } from 'mun-client-ts'
 
 import { Params } from "mun-client-ts/mun.mun/types"
+import { QueryGetVersionRequest } from "mun-client-ts/mun.mun/types"
+import { QueryGetVersionResponse } from "mun-client-ts/mun.mun/types"
+import { Version } from "mun-client-ts/mun.mun/types"
 
 
-export { Params };
+export { Params, QueryGetVersionRequest, QueryGetVersionResponse, Version };
 
 function initClient(vuexGetters) {
 	return new Client(vuexGetters['common/env/getEnv'], vuexGetters['common/wallet/signer'])
@@ -35,9 +38,13 @@ function getStructure(template) {
 const getDefaultState = () => {
 	return {
 				Params: {},
+				VersionAll: {},
 				
 				_Structure: {
 						Params: getStructure(Params.fromPartial({})),
+						QueryGetVersionRequest: getStructure(QueryGetVersionRequest.fromPartial({})),
+						QueryGetVersionResponse: getStructure(QueryGetVersionResponse.fromPartial({})),
+						Version: getStructure(Version.fromPartial({})),
 						
 		},
 		_Registry: registry,
@@ -71,6 +78,12 @@ export default {
 						(<any> params).query=null
 					}
 			return state.Params[JSON.stringify(params)] ?? {}
+		},
+				getVersionAll: (state) => (params = { params: {}}) => {
+					if (!(<any> params).query) {
+						(<any> params).query=null
+					}
+			return state.VersionAll[JSON.stringify(params)] ?? {}
 		},
 				
 		getTypeStructure: (state) => (type) => {
@@ -123,6 +136,32 @@ export default {
 				return getters['getParams']( { params: {...key}, query}) ?? {}
 			} catch (e) {
 				throw new Error('QueryClient:QueryParams API Node Unavailable. Could not perform query: ' + e.message)
+				
+			}
+		},
+		
+		
+		
+		
+		 		
+		
+		
+		async QueryVersionAll({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params, query=null }) {
+			try {
+				const key = params ?? {};
+				const client = initClient(rootGetters);
+				let value= (await client.MunMun.query.queryVersionAll(query ?? undefined)).data
+				
+					
+				while (all && (<any> value).pagination && (<any> value).pagination.next_key!=null) {
+					let next_values=(await client.MunMun.query.queryVersionAll({...query ?? {}, 'pagination.key':(<any> value).pagination.next_key} as any)).data
+					value = mergeResults(value, next_values);
+				}
+				commit('QUERY', { query: 'VersionAll', key: { params: {...key}, query}, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryVersionAll', payload: { options: { all }, params: {...key},query }})
+				return getters['getVersionAll']( { params: {...key}, query}) ?? {}
+			} catch (e) {
+				throw new Error('QueryClient:QueryVersionAll API Node Unavailable. Could not perform query: ' + e.message)
 				
 			}
 		},

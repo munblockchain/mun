@@ -18,13 +18,19 @@ type Params = {
   opts?: any
 }
 
+declare global {
+  interface Window {
+    keplr: any;
+  }
+}
+
 export default function ({ $s }: Params): Response {
   let connectToKeplr = async (
     onSuccessCb: () => void,
     onErrorCb: () => void
   ) => {
     try {
-      let features = ['no-legacy-stdTx']
+      let features: string[] = []
 
       let staking = $s.getters['cosmos.staking.v1beta1/getParams']()
       let tokens = $s.getters['cosmos.bank.v1beta1/getTotalSupply']()
@@ -35,13 +41,15 @@ export default function ({ $s }: Params): Response {
       let addrPrefix = $s.getters['common/env/addrPrefix']
 
       let coinDenom = $s.getters['common/env/coinDenom']
-      let coinDenomMin = $s.getters['common/env/coinDenomMin']
-      let coinDenomMinDecimal = $s.getters['common/env/coinDenomMinDecimal']
+      let coinMinimalDenom = $s.getters['common/env/coinDenomMin']
+      let coinDecimals = Number($s.getters['common/env/coinDenomMinDecimal'])
+      let coinGeckoId = ''
 
       let stakeCurrency = {
-        coinDenom: coinDenom,
-        coinMinimalDenom: coinDenomMin,
-        coinDecimals: coinDenomMinDecimal
+        coinDenom,
+        coinMinimalDenom,
+        coinDecimals,
+        // coinGeckoId
       }
 
       let bip44 = {
@@ -57,33 +65,19 @@ export default function ({ $s }: Params): Response {
         bech32PrefixConsPub: addrPrefix + 'valconspub'
       }
 
-      let currencies = tokens.supply.filter((a: Amount) => {return a.denom == coinDenomMin}).map((x: Amount) => {
-        const y: AmountWithMeta = {
-          amount: '0',
-          denom: '',
-          coinDenom: '',
-          coinMinimalDenom: '',
-          coinDecimals: 0
-        }
-        y.coinDenom = coinDenom
-        y.coinMinimalDenom = coinDenomMin
-        y.coinDecimals = coinDenomMinDecimal
-        return y
-      })
+      let currencies = [{
+        coinDenom,
+        coinMinimalDenom,
+        coinDecimals,
+        // coinGeckoId,
+      }]
 
-      let feeCurrencies = tokens.supply.filter((a: Amount) => {return a.denom == coinDenomMin}).map((x: Amount) => {
-        const y: AmountWithMeta = {
-          amount: '0',
-          denom: '',
-          coinDenom: '',
-          coinMinimalDenom: '',
-          coinDecimals: 0
-        }
-        y.coinDenom = coinDenom
-        y.coinMinimalDenom = coinDenomMin
-        y.coinDecimals = coinDenomMinDecimal
-        return y
-      })
+      let feeCurrencies = [{
+        coinDenom,
+        coinMinimalDenom,
+        coinDecimals,
+        // coinGeckoId,
+      }]
       let coinType = 118
 
       let gasPriceStep = {

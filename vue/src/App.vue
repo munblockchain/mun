@@ -1,60 +1,42 @@
 <template>
-  <div>
-    <SpTheme>
-      <SpNavbar
-        :links="navbarLinks"
-        :active-route="router.currentRoute.value.path"
-      />
+  <AppLayout :links="navbarLinks">
+    <div class="" style="min-height: calc(100vh - 195px);">
       <router-view />
-    </SpTheme>
-  </div>
+    </div>
+  </AppLayout>
 </template>
 
-<script lang="ts">
-import { SpNavbar, SpTheme } from './starportvue'
-import { computed, onBeforeMount } from 'vue'
-import { useRouter } from 'vue-router'
-import { useStore } from 'vuex'
+<script setup lang="ts">
+import { useStore } from 'vuex';
+import AppLayout from './layouts/AppLayout.vue'
 
-export default {
-  components: { SpTheme, SpNavbar },
+import useIBCDenom from './composables/useIBCDenom'
+import { onBeforeMount } from 'vue';
+import router from './router';
 
-  setup() {
-    // store
-    let $s = useStore()
+const navbarLinks = [
+  { name: 'Wallet', url: '/wallet' },
+  // { name: 'Assets', url: '/assets' },
+  { name: 'Validators', url: '/validators' },
+  { name: 'Airdrop', url: '/airdrop' },
+  { name: 'Remittance', url: '/broker' },
+]
 
-    // router
-    let router = useRouter()
+let $s = useStore()
 
-    // state
-    let navbarLinks = [
-      { name: 'MUN Wallet', url: '/coin' },
-      { name: 'MUN Assets', url: '/token' }
-    ]
+onBeforeMount(async () => {
+  await $s.dispatch('common/env/init')
+  router.push('wallet')
+})
 
-    // computed
-    let address = computed(() => $s.getters['common/wallet/address'])
-
-    // lh
-    onBeforeMount(async () => {
-      await $s.dispatch('common/env/init')
-
-      router.push('coin')
-    })
-
-    return {
-      navbarLinks,
-      // router
-      router,
-      // computed
-      address
-    }
-  }
-}
+// Get IBC Denom traces
+const { setIBCDenomTraces } = useIBCDenom({ $s });
+let queryIBCDenomTraces = (opts: any) => $s.dispatch("ibc.applications.transfer.v1/QueryDenomTraces", opts);
+queryIBCDenomTraces({ all: true }).then(res => {
+  setIBCDenomTraces(res.denom_traces);
+})
 </script>
 
-<style scoped lang="scss">
-body {
-  margin: 0;
-}
+<style lang="scss">
+@import './styles/app.scss';
 </style>

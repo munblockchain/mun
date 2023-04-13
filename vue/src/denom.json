@@ -1,0 +1,37 @@
+[
+    {
+        "denom": "TMUN",
+        "base_denom": "utmun",
+        "decimal": 6
+    },
+    {
+        "denom": "MUN",
+        "base_denom": "umun",
+        "decimal": 6
+    },
+    {
+        "denom": "Juno",
+        "base_denom": "ujuno",
+        "decimal": 6
+    },
+    {
+        "denom": "Kava",
+        "base_denom": "ukava",
+        "decimal": 6
+    },
+    {
+        "denom": "Atom",
+        "base_denom": "uatom",
+        "decimal": 6
+    },
+    {
+        "denom": "USDX",
+        "base_denom": "usdx",
+        "decimal": 6
+    },
+    {
+        "denom": "Osmo",
+        "base_denom": "uosmo",
+        "decimal": 6
+    }
+]

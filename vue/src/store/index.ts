@@ -1,8 +1,8 @@
-import { createStore } from 'vuex'
+import { createStore, Store } from 'vuex'
 
 import init from './config'
 
-const store = createStore({
+const store: Store<any> = createStore({
   state() {
     return {}
   },

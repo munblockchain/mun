@@ -5,97 +5,95 @@ import {
   onUnmounted,
   Ref,
   ref,
-  watch
-} from 'vue'
-import { Store } from 'vuex'
+  watch,
+} from "vue";
+import { Store } from "vuex";
 
-import { Amount, DenomTrace } from '../utils/interfaces'
+import { Amount, DenomTrace } from "../utils/interfaces";
 
-import { useAddress, useDenom } from '.'
+import { useAddress, useDenom } from ".";
 
 type Response = {
-  balances: Ref<{ isLoading: boolean; assets: AssetForUI[] }>
-  balancesRaw: ComputedRef<any[]>
-  normalize: (balance: object) => Promise<AssetForUI>
-}
+  balances: Ref<{ isLoading: boolean; assets: AssetForUI[] }>;
+  balancesRaw: ComputedRef<any[]>;
+  normalize: (balance: object) => Promise<AssetForUI>;
+};
 export type AssetForUI = {
-  amount: Amount
-  path?: string | string[]
-}
+  amount: Amount;
+  path?: string | string[];
+  ibc_denom?: string;
+};
 
 type Params = {
-  $s: Store<any>
+  $s: Store<any>;
   opts?: {
-    extractChannels: boolean
-  }
-}
+    extractChannels: boolean;
+  };
+};
 
 export default function ({ $s, opts }: Params): Response {
   // state
   let balances = ref({
     isLoading: true,
-    assets: []
-  })
+    assets: [],
+  });
 
   // composables
-  let { address } = useAddress({ $s })
-  let { getDenomTrace } = useDenom({ $s })
+  let { address } = useAddress({ $s });
+  let { getDenomTrace, normalizeAmount } = useDenom({ $s });
 
   // actions
   let queryAllBalances = (opts: any) =>
-    $s.dispatch('cosmos.bank.v1beta1/QueryAllBalances', opts)
+    $s.dispatch("cosmos.bank.v1beta1/QueryAllBalances", opts);
 
   // lh
   onBeforeMount(async () => {
     if (address.value) {
       queryAllBalances({
         params: { address: address.value },
-        options: { subscribe: true }
+        options: { subscribe: true },
       }).finally(() => {
-        balances.value.isLoading = false
-      })
+        balances.value.isLoading = false;
+      });
     }
-  })
+  });
 
   // computed
   let balancesRaw = computed<any[]>(() => {
     return (
-      $s.getters['cosmos.bank.v1beta1/getAllBalances']({
-        params: { address: address.value }
+      $s.getters["cosmos.bank.v1beta1/getAllBalances"]({
+        params: { address: address.value },
       })?.balances ?? []
-    )
-  })
+    );
+  });
 
   // methods
   let normalize = async (balance: any): Promise<AssetForUI> => {
-    let isIBC = balance.denom.indexOf('ibc/') == 0
+    let isIBC = balance.denom.indexOf("ibc/") == 0;
 
     let normalized: AssetForUI = {
       amount: {
-        amount: '',
-        denom: ''
-      }
-    }
+        amount: "" + balance.amount,
+        denom: "",
+      },
+    };
 
     if (isIBC) {
-      let denomTrace: DenomTrace = await getDenomTrace(balance.denom)
+      let denomTrace: DenomTrace = await getDenomTrace(balance.denom);
 
       normalized.path = opts?.extractChannels
         ? denomTrace.denom_trace.path.match(/\d+/g)?.reverse()
-        : denomTrace.denom_trace.path
-      normalized.amount.denom = denomTrace.denom_trace.base_denom
+        : denomTrace.denom_trace.path;
+      normalized.amount.denom = denomTrace.denom_trace.base_denom;
+      normalized.ibc_denom = balance.denom;
     } else {
-      if (balance.denom.charAt(0) == 'u') {
-        normalized.amount.denom = balance.denom.slice(1)
-      } else {
-        normalized.amount.denom = balance.denom
-      }
+        normalized.amount.denom = balance.denom;
     }
 
-    normalized.amount.amount = "" + (+balance.amount/1e6)
+    normalized.amount = normalizeAmount(normalized.amount);
 
-    return normalized
-  }
+    return normalized;
+  };
 
   //watch
   watch(
@@ -104,19 +102,19 @@ export default function ({ $s, opts }: Params): Response {
       if (newAddress !== oldAddress) {
         queryAllBalances({
           params: { address: newAddress },
-          options: { subscribe: true }
+          options: { subscribe: true },
         }).finally(() => {
-          balances.value.isLoading = false
-        })
+          balances.value.isLoading = false;
+        });
       }
 
-      let arr: Promise<AssetForUI>[] = balancesRaw.value.map(normalize)
+      let arr: Promise<AssetForUI>[] = balancesRaw.value.map(normalize);
 
       Promise.all(arr).then((normalized) => {
-        balances.value.assets = normalized as any
-      })
+        balances.value.assets = normalized as any;
+      });
     }
-  )
+  );
 
-  return { balancesRaw, normalize, balances }
+  return { balancesRaw, normalize, balances };
 }

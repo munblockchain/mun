@@ -48,17 +48,17 @@ export default class SPClient extends EventEmitter {
   constructor({ apiAddr, rpcAddr, wsAddr, refresh, offline }: IClientConfig) {
     super()
     this.apiAddr = apiAddr
-    this.rpcAddr = rpcAddr as string
-    this.wsAddr = wsAddr as string
-    this.offline = offline as boolean
-    this.refresh = refresh as number
+    this.rpcAddr = rpcAddr!
+    this.wsAddr = wsAddr!
+    this.offline = offline!
+    this.refresh = refresh!
     const poll: () => Promise<void> = this.connectivityTest.bind(this)
     this.timer = setInterval(poll, this.refresh)
     this.connectivityTest()
 
-    // if (this.wsAddr) {
-    //   this.connectWS()
-    // }
+    if (this.wsAddr) {
+      this.connectWS()
+    }
   }
   public async useSigner(signer: OfflineDirectSigner): Promise<void> {
     this.signingClient = await SigningStargateClient.connectWithSigner(
@@ -76,7 +76,7 @@ export default class SPClient extends EventEmitter {
     this.emit('ws-status', false)
     this.wsAddr = wsAddr
     this.socket.close()
-    // this.connectWS()
+    this.connectWS()
   }
 
   public connectWS() {
@@ -107,11 +107,11 @@ export default class SPClient extends EventEmitter {
     }
     if (this.apiAddr) {
       try {
-        const status: any = await axios.get(this.apiAddr + '/node_info')
-        this.emit('chain-id', status.data.node_info.network)
+        const status: any = await axios.get(this.apiAddr + '/cosmos/base/tendermint/v1beta1/node_info')
+        this.emit('chain-id', status.data.default_node_info.network)
         status.data.application_version.name
           ? this.emit('chain-name', status.data.application_version.name)
-          : this.emit('chain-name', status.data.node_info.network)
+          : this.emit('chain-name', status.data.default_node_info.network)
         this.emit('api-status', true)
       } catch (error) {
         if (!error.response) {
