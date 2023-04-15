@@ -1,4 +1,4 @@
-# How to upgrade to mun-upgrade-v3
+# How to upgrade to mun-upgrade-v2
 ## 1. Vote 'yes' to upgrade proposal
 ```
 mund tx gov vote [proposal_id] yes --from [wallet_name] --chain-id testmun --keyring-backend test -y

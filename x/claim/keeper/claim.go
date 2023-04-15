@@ -165,11 +165,6 @@ func (k Keeper) GetClaimableAmountForAction(ctx sdk.Context, addr sdk.AccAddress
 		return sdk.Coins{}, nil
 	}
 
-	// Removed Airdrop for swap action
-	if action == types.ActionSwap {
-		return sdk.Coins{}, nil
-	}
-
 	// if action already completed, nothing is claimable
 	if claimRecord.ActionCompleted[action] {
 		return sdk.Coins{}, nil
@@ -181,7 +176,7 @@ func (k Keeper) GetClaimableAmountForAction(ctx sdk.Context, addr sdk.AccAddress
 	}
 
 	// if action is not ready, nothing is claimable
-	if action != types.ActionInitialClaim && !claimRecord.ActionReady[action] {
+	if action != types.ActionInitialClaim && action != types.ActionSwap && !claimRecord.ActionReady[action] {
 		return sdk.Coins{}, nil
 	}
 

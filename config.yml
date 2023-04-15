@@ -1,23 +1,24 @@
 version: 1
 build:
-  main: ./cmd/mund
+  proto:
+    path: proto
+    third_party_paths:
+    - third_party/proto
+    - proto_vendor
 accounts:
-  - name: alice
-    coins: ["2000000000utmun"]
-    mnemonic: alarm robust diet dinosaur honey pencil dial wall scene strategy hint predict bleak physical ancient creek insane limb boring scan eager erode behave vehicle
-  - name: bob
-    coins: ["10000utmun"]
-    mnemonic: economy ticket horror harbor draw educate vehicle fly hen crystal album exist mechanic creek ugly economy say category lunar much sound during inmate coyote
-  - name: tom
-    coins: ["1000000000000utmun"]
-    mnemonic: orphan cradle clarify priority jeans light hold country bright flight tail position various bunker later scale nose edge suggest fit direct lock immense tumble
-  - name: jerry
-    coins: ["100000000000000utmun"]
-    mnemonic: degree tissue code business hair agree fruit print bargain tissue fuel small neutral word prefer glimpse fiscal mention lawn royal balance tray jazz faculty
+- name: alice
+  coins:
+  - 20000token
+  - 200000000stake
+- name: bob
+  coins:
+  - 10000token
+  - 100000000stake
 faucet:
   name: bob
   coins:
-  - 100000utmun
+  - 5token
+  - 100000stake
   host: 0.0.0.0:4500
 client:
   vuex:
@@ -26,11 +27,4 @@ client:
     path: docs/static/openapi.yml
 validators:
 - name: alice
-  bonded: 100000000utmun
-- name: bob
-  bonded: 1000000000utmun
-genesis:
-  app_state:
-    staking:
-      params:
-        bond_denom: "utmun"
+  bonded: 100000000stake
