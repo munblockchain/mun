@@ -10,8 +10,8 @@ mund version
 sudo rm -rf /var/log/mund/
 cd $HOME/mun && make log-files
 echo "=============Preparing binary upgrades============="
-cd $HOME/.mun/upgrade_manager/upgrades && mkdir mun-upgrade-v203 && cd mun-upgrade-v203 && mkdir bin
-cp $HOME/go/bin/mund $HOME/.mun/upgrade_manager/upgrades/mun-upgrade-v203/bin/
+mkdir -p $HOME/.mun/upgrade_manager/upgrades/mun-upgrade-v3.0.1/bin
+cp $HOME/go/bin/mund $HOME/.mun/upgrade_manager/upgrades/mun-upgrade-v3.0.1/bin/
 echo "=============Upgrading service configration============="
 sudo sed -i 's/=on/=true/g' /etc/systemd/system/mund.service
 sudo sed -i 's/=true-/=on-/g' /etc/systemd/system/mund.service

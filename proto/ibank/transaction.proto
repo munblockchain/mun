@@ -1,0 +1,36 @@
+syntax = "proto3";
+package mun.ibank;
+
+option go_package = "mun/x/ibank/types";
+import "gogoproto/gogo.proto"; 
+import "cosmos/base/v1beta1/coin.proto"; 
+import "google/protobuf/timestamp.proto";
+
+enum TxnStatus {
+  TXN_PENDING = 0;
+  TXN_SENT = 1;
+  TXN_EXPIRED = 2;
+  TXN_DECLINED = 3;
+}
+
+message Transaction {
+  uint64 id = 1;
+  string sender = 2; 
+  google.protobuf.Timestamp sent_at = 3 [
+    (gogoproto.stdtime) = true,
+    (gogoproto.nullable) = false
+  ];
+    
+  string receiver = 4;
+  // If sent_at is equal to received_at, transaction have not been performed
+  google.protobuf.Timestamp received_at = 5 [
+    (gogoproto.stdtime) = true,
+    (gogoproto.nullable) = false
+  ];
+  repeated cosmos.base.v1beta1.Coin coins = 6 [(gogoproto.nullable) = false]; 
+  TxnStatus status = 7;
+
+  // hash value of 6 word password
+  string password = 8;
+  int32 retry = 9;
+}

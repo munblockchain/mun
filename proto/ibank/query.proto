@@ -1,0 +1,96 @@
+syntax = "proto3";
+package mun.ibank;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "ibank/params.proto";
+import "ibank/transaction.proto";
+// this line is used by starport scaffolding # 1
+
+option go_package = "mun/x/ibank/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Parameters queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/mun/ibank/params";
+  }
+  // Queries a Transaction by id.
+	rpc Transaction(QueryGetTransactionRequest) returns (QueryGetTransactionResponse) {
+		option (google.api.http).get = "/mun/ibank/transaction/{id}";
+	}
+
+	// Queries a list of Transaction items.
+	rpc TransactionAll(QueryAllTransactionRequest) returns (QueryAllTransactionResponse) {
+		option (google.api.http).get = "/mun/ibank/transaction_all/{address}";
+	}
+
+// Queries a list of ShowIncoming items.
+	rpc Incoming(QueryIncomingRequest) returns (QueryIncomingResponse) {
+		option (google.api.http).get = "/mun/ibank/incoming/{receiver}/{pending}";
+	}
+
+// Queries a list of ShowOutgoing items.
+	rpc Outgoing(QueryOutgoingRequest) returns (QueryOutgoingResponse) {
+		option (google.api.http).get = "/mun/ibank/outgoing/{sender}/{pending}";
+	}
+
+// this line is used by starport scaffolding # 2
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetTransactionRequest {
+	uint64 id = 1;
+}
+
+message QueryGetTransactionResponse {
+	Transaction transaction = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllTransactionRequest {
+	string address = 1;
+	cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryAllTransactionResponse {
+	repeated TransactionWrapper transactions = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryIncomingRequest {
+  string receiver = 1;
+  bool pending = 2;
+  cosmos.base.query.v1beta1.PageRequest pagination = 3;
+}
+
+message QueryIncomingResponse {
+	repeated TransactionWrapper transactions = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message TransactionWrapper {
+	Transaction transaction = 1 [(gogoproto.nullable) = false];
+	uint32 time_left = 2;
+}
+
+message QueryOutgoingRequest {
+  string sender = 1;
+  bool pending = 2;
+  cosmos.base.query.v1beta1.PageRequest pagination = 3;
+}
+
+message QueryOutgoingResponse {
+	repeated TransactionWrapper transactions = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// this line is used by starport scaffolding # 3
