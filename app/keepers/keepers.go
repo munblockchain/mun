@@ -70,7 +70,6 @@ import (
 	ibctransfertypes "github.com/cosmos/ibc-go/v4/modules/apps/transfer/types"
 	ibcclient "github.com/cosmos/ibc-go/v4/modules/core/02-client"
 	ibcclienttypes "github.com/cosmos/ibc-go/v4/modules/core/02-client/types"
-	ibcfeetypes "github.com/cosmos/ibc-go/v4/modules/core/05-port/types"
 	ibcporttypes "github.com/cosmos/ibc-go/v4/modules/core/05-port/types"
 	ibchost "github.com/cosmos/ibc-go/v4/modules/core/24-host"
 
@@ -294,8 +293,8 @@ func NewAppKeepers(
 
 	app.IBCFeeKeeper = ibcfeekeeper.NewKeeper(
 		appCodec,
-		keys[ibcfeetypes.StoreKey],
-		app.GetSubspace(ibcfeetypes.SubModuleName),
+		keys[ibcporttypes.StoreKey],
+		app.GetSubspace(ibcporttypes.SubModuleName),
 		app.PacketForwardKeeper,
 		app.IBCKeeper.ChannelKeeper,
 		&app.IBCKeeper.PortKeeper,
@@ -441,7 +440,10 @@ func (appKeepers *AppKeepers) GetKey(storeKey string) *sdk.KVStoreKey {
 }
 
 func (aks *AppKeepers) GetSubspace(moduleName string) paramstypes.Subspace {
-	subspace, _ := aks.ParamsKeeper.GetSubspace(moduleName)
+	subspace, ok := aks.ParamsKeeper.GetSubspace(moduleName)
+	if !ok {
+		panic(moduleName + " module subspace does not exist")
+	}
 	return subspace
 }
 
@@ -464,6 +466,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(icahosttypes.SubModuleName)
 	paramsKeeper.Subspace(claimmoduletypes.ModuleName)
 	paramsKeeper.Subspace(allocmoduletypes.ModuleName)
+	paramsKeeper.Subspace(ibcporttypes.SubModuleName)
 	// this line is used by starport scaffolding # stargate/app/paramSubspace
 	paramsKeeper.Subspace(wasm.ModuleName)
 	paramsKeeper.Subspace(ibankmoduletypes.ModuleName)

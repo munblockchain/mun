@@ -230,9 +230,9 @@ func OrderEndBlockers() []string {
 		icatypes.ModuleName,
 		ibcfeetypes.ModuleName,
 		allocmoduletypes.ModuleName, claimmoduletypes.ModuleName,
-		// this line is used by starport scaffolding # stargate/app/endBlockers
 		wasm.ModuleName,
 		ibankmoduletypes.ModuleName,
+		// this line is used by starport scaffolding # stargate/aspp/endBlockers
 	}
 }
 
