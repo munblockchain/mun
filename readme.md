@@ -6,9 +6,8 @@
 - Memory: 16GB
 - OS: Ubuntu 22.04 LTS
 - Allow all incoming connections from TCP port 26656 and 26657
-Static IP address
-- The recommended configuration from AWS is the equivalent of a t2.large machine
-with 300GB EBS attached storage.
+- Static IP address
+- The recommended configuration from AWS is the equivalent of a t2.large machine with 500 GB HD
 ```
 
 ## Installing prerequisites
@@ -20,9 +19,9 @@ sudo apt install build-essential jq -y
 
 ## Install Golang:
 
-## Install latest go version https://golang.org/doc/install
+## Install go version 1.19 https://golang.org/doc/install
 ```
-wget -q -O - https://raw.githubusercontent.com/canha/golang-tools-install-script/master/goinstall.sh | bash -s -- --version 1.18
+wget -q -O - https://raw.githubusercontent.com/canha/golang-tools-install-script/master/goinstall.sh | bash -s -- --version 1.19
 source ~/.profile
 ```
 
@@ -30,11 +29,11 @@ source ~/.profile
 ```
 go version
 ```
-// Should return go version go1.18 linux/amd64
+// Should return go version go1.19 linux/amd64
 
 ## Clone repository
 ```
-git clone https://github.com/bitxat/mun
+git clone https://github.com/munblockchain/mun
 cd mun
 ```
 
@@ -59,7 +58,7 @@ sudo cp $(which mund-manager) /usr/bin
 
 ## Initialize the validator with a moniker name(Example moniker: solid-moon-rock)
 ```
-mund init [moniker_name] --chain-id testmun
+mund init [moniker_name] --chain-id testmun-3
 ```
 
 ## Add a new wallet address, store seeds and buy TMUN to it. 
@@ -68,18 +67,14 @@ mund keys add [wallet_name] --keyring-backend test
 ```
 
 ## Fetch genesis.json from genesis node
-curl --tlsv1 https://node1.mun.money/genesis? | jq ".result.genesis" > ~/.mun/config/genesis.json
+curl http://31.14.40.191/data/genesis_3093970.json --output ~/.mun/config/genesis.json
 
 ## Update seed in config.toml to make p2p connection
 ```
 nano ~/.mun/config/config.toml
-seeds = "d33c86f138b34301ab041ea1371b3d682f33af9c@node1.mun.money:26656"
+seeds = "74bea3fc80aa128c9a757873f2348baa23e9921a@157.245.77.89:26656"
 ```
-
-## Replace stake to TMUN
-```
-sed -i 's/stake/utmun/g' ~/.mun/config/genesis.json
-```
+## Join our Discord and ask for the validator role to get access to more seeds!
 
 ## Create the service file "/etc/systemd/system/mund.service" with the following content
 ```
@@ -146,5 +141,5 @@ You should wait until the node gets fully synchronized with other nodes. You can
 **A transaction to become a validator by staking TMUN**
 
 ```
-mund tx staking create-validator --from [wallet_name] --moniker [moniker_name] --pubkey $(mund tendermint show-validator) --chain-id testmun --keyring-backend test --amount 2000000000000000utmun --commission-max-change-rate 0.01 --commission-max-rate 0.2 --commission-rate 0.1 --min-self-delegation 1 --fees 20000utmun -y
+mund tx staking create-validator --from [wallet_name] --moniker [moniker_name] --pubkey $(mund tendermint show-validator) --chain-id testmun-3 --keyring-backend test --amount 2000000000000000utmun --commission-max-change-rate 0.01 --commission-max-rate 0.2 --commission-rate 0.1 --min-self-delegation 1 --fees 20000utmun -y
 ```
