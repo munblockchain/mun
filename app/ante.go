@@ -38,7 +38,7 @@ func (min MinCommissionDecorator) AnteHandle(
 	simulate bool, next sdk.AnteHandler,
 ) (newCtx sdk.Context, err error) {
 	msgs := tx.GetMsgs()
-	minCommissionRate := sdk.NewDecWithPrec(5, 2)
+	minCommissionRate := sdk.NewDecWithPrec(0, 2)
 
 	validMsg := func(m sdk.Msg) error {
 		switch msg := m.(type) {

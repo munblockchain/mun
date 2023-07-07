@@ -18,9 +18,9 @@ func CreateUpgradeHandler(
 	return func(ctx sdk.Context, plan upgradetypes.Plan, vm module.VersionMap) (module.VersionMap, error) {
 		ctx.Logger().Info("start to run module migrations...")
 
-		unbond_time, _ := time.ParseDuration("1814400s")
+		unbondingTime, _ := time.ParseDuration("1814400s")
 		stakingParams := stakingtypes.Params{
-			UnbondingTime:     unbond_time,
+			UnbondingTime:     unbondingTime,
 			MaxValidators:     150,
 			MaxEntries:        7,
 			HistoricalEntries: 10000,

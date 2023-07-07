@@ -25,8 +25,9 @@ import (
 )
 
 var (
-	_ module.AppModule      = AppModule{}
-	_ module.AppModuleBasic = AppModuleBasic{}
+	_ module.AppModule           = AppModule{}
+	_ module.AppModuleBasic      = AppModuleBasic{}
+	_ module.AppModuleSimulation = AppModule{}
 )
 
 // ----------------------------------------------------------------------------
@@ -35,10 +36,10 @@ var (
 
 // AppModuleBasic implements the AppModuleBasic interface that defines the independent methods a Cosmos SDK module needs to implement.
 type AppModuleBasic struct {
-	cdc codec.BinaryCodec
+	cdc codec.Codec
 }
 
-func NewAppModuleBasic(cdc codec.BinaryCodec) AppModuleBasic {
+func NewAppModuleBasic(cdc codec.Codec) AppModuleBasic {
 	return AppModuleBasic{cdc: cdc}
 }
 
@@ -77,7 +78,7 @@ func (AppModuleBasic) RegisterRESTRoutes(clientCtx client.Context, rtr *mux.Rout
 
 // RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the module
 func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
-	types.RegisterQueryHandlerClient(context.Background(), mux, types.NewQueryClient(clientCtx))
+	types.RegisterQueryHandlerClient(context.Background(), mux, types.NewQueryClient(clientCtx)) //nolint: errcheck
 }
 
 // GetTxCmd returns the root Tx command for the module. The subcommands of this root command are used by end-users to generate new transactions containing messages defined in the module
@@ -119,10 +120,6 @@ func NewAppModule(
 
 // Deprecated: use RegisterServices
 func (am AppModule) Route() sdk.Route { return sdk.Route{} }
-
-// func (am AppModule) Route() sdk.Route {
-// 	return sdk.NewRoute(types.RouterKey, NewHandler(am.keeper))
-// }
 
 // Deprecated: use RegisterServices
 func (AppModule) QuerierRoute() string { return types.RouterKey }

@@ -1,6 +1,7 @@
 package ibank
 
 import (
+	"fmt"
 	"mun/x/ibank/keeper"
 	"mun/x/ibank/types"
 
@@ -21,8 +22,10 @@ func EndBlocker(ctx sdk.Context, k keeper.Keeper) {
 			break
 		}
 
-		if tx.Status == types.TXN_PENDING {
-			k.Refund(ctx, tx, true)
+		if tx.Status == types.TxPending {
+			if err := k.Refund(ctx, tx, true); err != nil {
+				ctx.Logger().Error(fmt.Sprintf("ibank: refund error on end blocker, id: %d", id))
+			}
 		}
 	}
 

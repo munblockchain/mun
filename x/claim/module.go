@@ -25,8 +25,9 @@ import (
 )
 
 var (
-	_ module.AppModule      = AppModule{}
-	_ module.AppModuleBasic = AppModuleBasic{}
+	_ module.AppModule           = AppModule{}
+	_ module.AppModuleBasic      = AppModuleBasic{}
+	_ module.AppModuleSimulation = AppModule{}
 )
 
 // ----------------------------------------------------------------------------
@@ -104,12 +105,16 @@ func (AppModuleBasic) GetQueryCmd() *cobra.Command {
 type AppModule struct {
 	AppModuleBasic
 
-	keeper keeper.Keeper
+	accountKeeper types.AccountKeeper
+	bankKeeper    types.BankKeeper
+	keeper        keeper.Keeper
 }
 
-func NewAppModule(cdc codec.Codec, keeper keeper.Keeper) AppModule {
+func NewAppModule(cdc codec.Codec, accountKeeper types.AccountKeeper, bankKeeper types.BankKeeper, keeper keeper.Keeper) AppModule {
 	return AppModule{
 		AppModuleBasic: NewAppModuleBasic(cdc),
+		accountKeeper:  accountKeeper,
+		bankKeeper:     bankKeeper,
 		keeper:         keeper,
 	}
 }

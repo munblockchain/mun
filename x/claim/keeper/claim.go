@@ -1,7 +1,9 @@
 package keeper
 
 import (
+	"encoding/hex"
 	"mun/x/claim/types"
+	"strings"
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -59,7 +61,6 @@ func (k Keeper) ClaimRecords(ctx sdk.Context) []types.ClaimRecord {
 
 	claimRecords := []types.ClaimRecord{}
 	for ; iterator.Valid(); iterator.Next() {
-
 		claimRecord := types.ClaimRecord{}
 
 		err := proto.Unmarshal(iterator.Value(), &claimRecord)
@@ -124,7 +125,9 @@ func (k Keeper) SetClaimableActionReady(ctx sdk.Context, addr sdk.AccAddress, ac
 	claimRecord.ActionReady[action] = true
 
 	// Create a new claim record with initial claim amount
-	k.SetClaimRecord(ctx, claimRecord)
+	if err := k.SetClaimRecord(ctx, claimRecord); err != nil {
+		return false
+	}
 
 	return true
 }
@@ -158,7 +161,9 @@ func (k Keeper) GetClaimableAmountForAction(ctx sdk.Context, addr sdk.AccAddress
 		}
 
 		// Create a new claim record with initial claim amount
-		k.SetClaimRecord(ctx, claimRecord)
+		if err := k.SetClaimRecord(ctx, claimRecord); err != nil {
+			return sdk.Coins{}, nil
+		}
 	}
 
 	if claimRecord.Address == "" {
@@ -255,6 +260,7 @@ func (k Keeper) ClaimCoinsForAction(ctx sdk.Context, addr sdk.AccAddress, action
 	if !params.IsAirdropEnabled(ctx.BlockTime()) {
 		return sdk.Coins{}, nil
 	}
+
 	claimableAmount, err := k.GetClaimableAmountForAction(ctx, addr, action)
 	if err != nil {
 		return claimableAmount, err
@@ -317,4 +323,33 @@ func (k Keeper) clearInitialClaimables(ctx sdk.Context) {
 		key := iterator.Key()
 		store.Delete(key)
 	}
+}
+
+func (k Keeper) GetMerkleRoot(ctx sdk.Context) string {
+	prefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), []byte{})
+	return string(prefixStore.Get(types.MerkleRootStorePrefix))
+}
+
+func (k Keeper) SetMerkleRoot(ctx sdk.Context, rootValue string) {
+	prefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), []byte{})
+	prefixStore.Set(types.MerkleRootStorePrefix, []byte(rootValue))
+}
+
+func (k Keeper) VerifyMerkleTree(merkleRoot, leafRaw, proofRaw string) bool {
+	rootHash, _ := hex.DecodeString(merkleRoot)
+	hashes := make([][]byte, 0)
+	hexes := strings.Split(proofRaw, ",")
+	for i := 0; i < len(hexes)-1; i++ {
+		s, err := hex.DecodeString(hexes[i])
+		if err != nil {
+			return false
+		}
+		hashes = append(hashes, s)
+	}
+
+	res, err := VerifyProof([]byte(leafRaw), hashes, rootHash, hexes[len(hexes)-1])
+	if err != nil {
+		return false
+	}
+	return res
 }

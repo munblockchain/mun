@@ -25,15 +25,19 @@ service Query {
     option (google.api.http).get =
         "/mun/claim/v1beta1/claim_record/{address}";
   }
-  rpc ClaimableForAction(QueryClaimableForActionRequest)
-      returns (QueryClaimableForActionResponse) {
-    option (google.api.http).get =
-        "/mun/claim/v1beta1/claimable_for_action/{address}/{action}";
+  rpc ClaimableForAction(QueryClaimableForActionRequest) returns (QueryClaimableForActionResponse) {
+    option (google.api.http).get = "/mun/claim/v1beta1/claimable_for_action/{address}/{action}";
   }
-  rpc TotalClaimable(QueryTotalClaimableRequest)
-      returns (QueryTotalClaimableResponse) {
-    option (google.api.http).get =
-        "/mun/claim/v1beta1/total_claimable/{address}";
+  rpc TotalClaimable(QueryTotalClaimableRequest) returns (QueryTotalClaimableResponse) {
+    option (google.api.http).get = "/mun/claim/v1beta1/total_claimable/{address}";
+  }
+
+  rpc MerkleRoot(QueryMerkleRootRequest) returns (QueryMerkleRootResponse) {
+    option (google.api.http).get = "/mun/claim/v1beta1/merkle_root";
+  }
+
+  rpc Whitelisted(QueryWhitelistedRequest) returns (QueryWhitelistedResponse) {
+    option (google.api.http).get = "/mun/claim/v1beta1/verify/{address}/{proof}";
   }
 }
 // this line is used by starport scaffolding # 3
@@ -94,4 +98,20 @@ message QueryTotalClaimableResponse {
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
+}
+
+message QueryMerkleRootRequest {
+}
+
+message QueryMerkleRootResponse {
+  string merkle_root = 1;
+}
+
+message QueryWhitelistedRequest {
+  string address = 1;
+  string proof = 2;
+}
+
+message QueryWhitelistedResponse {
+  bool whitelisted = 1;
 }

@@ -1,5 +1,9 @@
-VERSION := 3.0.2
+VERSION := 3.0.3
 COMMIT := $(shell git log -1 --format='%H')
+GOPATH ?= $(shell go env GOPATH)
+BINDIR ?= $(GOPATH)/bin
+CURRENT_DIR = $(shell pwd)
+APP = ./app
 
 ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=mun \
 	-X github.com/cosmos/cosmos-sdk/version.ServerName=mund \
@@ -69,6 +73,45 @@ localnet-stop:
 localnet: clean build-linux build-docker localnet-start
 
 ###############################################################################
+###                           Tests & Simulation                            ###
+###############################################################################
+
+runsim:
+	go install github.com/cosmos/tools/cmd/runsim@latest
+
+PACKAGES_SIM=$(shell go list ./... | grep '/app')
+
+test-sim-suite:
+	@VERSION=$(VERSION) go test -mod=readonly $(PACKAGES_SIM)
+
+test-sim-app:
+	@VERSION=$(VERSION) go test -mod=readonly -run ^TestFullAppSimulation ./app -Enabled=true -v -NumBlocks=10 -BlockSize=200 -Commit=true -Period=0
+
+test-sim-full-app: runsim
+	@echo "Running short multi-seed application simulation. This may take awhile!"
+	@$(BINDIR)/runsim -Jobs=4 -SimAppPkg=$(APP) -ExitOnFail 50 10 TestFullAppSimulation
+
+test-sim-multi-seed-long: runsim
+	@echo "Running long multi-seed application simulation. This may take awhile!"
+	@cd ${CURRENT_DIR}/simapp && $(BINDIR)/runsim -Jobs=4 -SimAppPkg=. -ExitOnFail 500 50 TestFullAppSimulation
+
+test-sim-nondeterminism:
+	@echo "Running non-determinism test..."
+	go test -mod=readonly -run ^TestAppStateDeterminism ./app -Enabled=true -NumBlocks=10 -BlockSize=200 -Commit=true -Period=0 -v -timeout 24h
+
+test-sim-import-export: runsim
+	@echo "Running application import/export simulation. This may take several minutes..."
+	@cd ${CURRENT_DIR}/app && $(BINDIR)/runsim -Jobs=4 -SimAppPkg=. -ExitOnFail 50 5 TestAppImportExport
+
+test-sim-after-import: runsim
+	@echo "Running application simulation-after-import. This may take several minutes..."
+	@cd ${CURRENT_DIR}/app && $(BINDIR)/runsim -Jobs=4 -SimAppPkg=. -ExitOnFail 50 5 TestAppSimulationAfterImport
+
+test-sim-bench:
+	@VERSION=$(VERSION) go test -benchmem -run ^BenchmarkFullAppSimulation -bench ^BenchmarkFullAppSimulation -cpuprofile cpu.out $(PACKAGES_SIM)
+
+
+###############################################################################
 ###                                Protobuf                                 ###
 ###############################################################################
 
@@ -99,7 +142,6 @@ proto-format:
 	@echo "Formatting Protobuf files"
 	@if docker ps -a --format '{{.Names}}' | grep -Eq "^${containerProtoFmt}$$"; then docker start -a $(containerProtoFmt); else docker run --name $(containerProtoFmt) -v $(CURDIR):/workspace --workdir /workspace tendermintdev/docker-build-proto \
 		find ./ -not -path "./third_party/*" -name "*.proto" -exec clang-format -i {} \; ; fi
-
 
 proto-lint:
 	@$(DOCKER_BUF) lint --error-format=json

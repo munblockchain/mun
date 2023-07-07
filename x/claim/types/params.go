@@ -1,7 +1,7 @@
 package types
 
 import (
-	fmt "fmt"
+	"fmt"
 	"strings"
 	"time"
 
@@ -20,19 +20,17 @@ var (
 	KeyEnabled            = []byte("Enabled")
 	KeyStartTime          = []byte("StartTime")
 	KeyClaimDenom         = []byte("ClaimDenom")
-	KeyDurationUntilDecal = []byte("DurationUntilDecay")
+	KeyDurationUntilDecay = []byte("DurationUntilDecay")
 	KeyDurationOfDecay    = []byte("DurationOfDecay")
-	KeyAllowedClaimers    = []byte("AllowedClaimers")
 )
 
-func NewParams(enabled bool, claimDenom string, startTime time.Time, durationUntilDecay, durationOfDecay time.Duration, allowedClaimers []ClaimAuthorization) Params {
+func NewParams(enabled bool, claimDenom string, startTime time.Time, durationUntilDecay, durationOfDecay time.Duration) Params {
 	return Params{
 		AirdropEnabled:     enabled,
 		ClaimDenom:         claimDenom,
 		AirdropStartTime:   startTime,
 		DurationUntilDecay: durationUntilDecay,
 		DurationOfDecay:    durationOfDecay,
-		AllowedClaimers:    allowedClaimers,
 	}
 }
 
@@ -51,9 +49,8 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair(KeyEnabled, &p.AirdropEnabled, validateEnabled),
 		paramtypes.NewParamSetPair(KeyClaimDenom, &p.ClaimDenom, validateDenom),
 		paramtypes.NewParamSetPair(KeyStartTime, &p.AirdropStartTime, validateTime),
-		paramtypes.NewParamSetPair(KeyDurationUntilDecal, &p.DurationUntilDecay, validateDuration),
+		paramtypes.NewParamSetPair(KeyDurationUntilDecay, &p.DurationUntilDecay, validateDuration),
 		paramtypes.NewParamSetPair(KeyDurationOfDecay, &p.DurationOfDecay, validateDuration),
-		paramtypes.NewParamSetPair(KeyAllowedClaimers, &p.AllowedClaimers, validateClaimers),
 	}
 }
 
@@ -120,14 +117,6 @@ func validateDuration(i interface{}) error {
 	}
 	if d < 1 {
 		return fmt.Errorf("duration must be greater than or equal to 1: %d", d)
-	}
-	return nil
-}
-
-func validateClaimers(i interface{}) error {
-	_, ok := i.([]ClaimAuthorization)
-	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
 	}
 	return nil
 }

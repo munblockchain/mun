@@ -145,7 +145,7 @@ func WaitForUpgradeOrExit(cmd *exec.Cmd, scanOut, scanErr *bufio.Scanner) (*Upgr
 	// if we had upgrade info, we would have killed it, and thus got a non-nil error code
 	err := cmd.Wait()
 	if err == nil {
-		return nil, nil
+		return nil, nil // nolint: nilnil
 	}
 	// this will set the error code if it wasn't killed due to upgrade
 	res.SetError(err)

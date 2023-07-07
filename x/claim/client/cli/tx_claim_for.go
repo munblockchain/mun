@@ -25,19 +25,27 @@ func CmdClaimFor() *cobra.Command {
 				return err
 			}
 
-			action, _ := strconv.ParseInt(args[0], 10, 64)
-			typeAction := types.ActionInitialClaim
+			action, err := strconv.ParseInt(args[0], 10, 64)
+			if err != nil {
+				return err
+			}
 
-			if action == 1 {
+			var typeAction types.Action
+			var proof string
+			switch action {
+			case 1:
 				typeAction = types.ActionDelegateStake
-			} else if action == 2 {
+			case 2:
 				typeAction = types.ActionVote
+			default:
+				typeAction = types.ActionInitialClaim
+				proof = cmd.Flags().Lookup("proof").Value.String()
 			}
 
 			msg := types.NewMsgClaimFor(
 				clientCtx.GetFromAddress().String(),
-				clientCtx.GetFromAddress().String(),
 				typeAction,
+				proof,
 			)
 
 			if err := msg.ValidateBasic(); err != nil {
@@ -46,6 +54,7 @@ func CmdClaimFor() *cobra.Command {
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}
+	cmd.Flags().String("proof", "", "Proof for initial claim")
 
 	flags.AddTxFlagsToCmd(cmd)
 

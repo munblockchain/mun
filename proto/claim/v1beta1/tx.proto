@@ -11,26 +11,16 @@ option go_package = "mun/x/claim/types";
 
 // Msg defines the Msg service.
 service Msg {
-  rpc InitialClaim(MsgInitialClaim) returns (MsgInitialClaimResponse);
-  // this line is used by starport scaffolding # proto/tx/rpc
+  // rpc InitialClaim(MsgInitialClaim) returns (MsgInitialClaimResponse);
   rpc ClaimFor(MsgClaimFor) returns (MsgClaimForResponse);
-}
-
-message MsgInitialClaim { string sender = 1; }
-
-message MsgInitialClaimResponse {
-  // total initial claimable amount for the user
-  repeated cosmos.base.v1beta1.Coin claimed_amount = 2 [
-    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
-    (gogoproto.nullable) = false,
-    (gogoproto.moretags) = "yaml:\"claimed_amount\""
-  ];
+  rpc UpdateMerkleRoot(MsgUpdateMerkleRoot) returns (MsgUpdateMerkleRootResponse);
+  // this line is used by starport scaffolding # proto/tx/rpc
 }
 
 message MsgClaimFor {
   string sender = 1;
-  string address = 2;
-  Action action = 3;
+  Action action = 2;
+  string proof = 3;
 }
 
 message MsgClaimForResponse {
@@ -42,3 +32,10 @@ message MsgClaimForResponse {
     (gogoproto.moretags) = "yaml:\"claimed_amount\""
   ];
 }
+
+message MsgUpdateMerkleRoot {
+  string sender = 1;
+  string root_value = 2;
+}
+
+message MsgUpdateMerkleRootResponse {}

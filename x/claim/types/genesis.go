@@ -20,6 +20,7 @@ func DefaultGenesis() *GenesisState {
 		ModuleAccountBalance: sdk.NewCoin(DefaultClaimDenom, sdk.ZeroInt()),
 		Params:               DefaultParams(),
 		ClaimRecords:         make([]ClaimRecord, 0),
+		MerkleRoot:           "",
 	}
 }
 
@@ -30,6 +31,15 @@ func DefaultParams() Params {
 		DurationUntilDecay: DefaultDurationUntilDecay,
 		DurationOfDecay:    DefaultDurationOfDecay,
 		ClaimDenom:         DefaultClaimDenom,
+	}
+}
+
+func NewGenesisState(moduleAccountBalance sdk.Coin, params Params, claimRecords []ClaimRecord, merkleRoot string) *GenesisState {
+	return &GenesisState{
+		ModuleAccountBalance: moduleAccountBalance,
+		Params:               params,
+		ClaimRecords:         claimRecords,
+		MerkleRoot:           merkleRoot,
 	}
 }
 
@@ -45,6 +55,7 @@ func (gs GenesisState) Validate() error {
 	if !totalClaimable.IsEqual(sdk.NewCoins(gs.ModuleAccountBalance)) {
 		return ErrIncorrectModuleAccountBalance
 	}
+
 	return nil
 }
 

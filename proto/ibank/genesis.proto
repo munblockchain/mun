@@ -13,5 +13,6 @@ message GenesisState {
   Params params = 1 [(gogoproto.nullable) = false];
   repeated Transaction transactionList = 2 [(gogoproto.nullable) = false];
   uint64 transactionCount = 3;
+  uint64 transactionChaser = 4;
   // this line is used by starport scaffolding # genesis/proto/state
 }

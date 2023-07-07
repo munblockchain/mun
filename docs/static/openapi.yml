@@ -19830,6 +19830,16 @@ paths:
           in: query
           required: false
           type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
+          in: query
+          required: false
+          type: boolean
       tags:
         - Query
   /cosmwasm/wasm/v1/code/{code_id}:
@@ -20360,6 +20370,16 @@ paths:
           in: query
           required: false
           type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
+          in: query
+          required: false
+          type: boolean
       tags:
         - Query
   /cosmwasm/wasm/v1/codes/params:
@@ -20880,6 +20900,16 @@ paths:
             when key
 
             is set.
+          in: query
+          required: false
+          type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
           in: query
           required: false
           type: boolean
@@ -21512,6 +21542,16 @@ paths:
             when key
 
             is set.
+          in: query
+          required: false
+          type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
           in: query
           required: false
           type: boolean
@@ -22230,6 +22270,16 @@ paths:
           in: query
           required: false
           type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
+          in: query
+          required: false
+          type: boolean
       tags:
         - Query
   /cosmwasm/wasm/v1/contracts/creator/{creator_address}:
@@ -22502,6 +22552,16 @@ paths:
             when key
 
             is set.
+          in: query
+          required: false
+          type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
           in: query
           required: false
           type: boolean
@@ -35823,63 +35883,6 @@ paths:
           format: uint64
       tags:
         - Query
-  /mun/alloc/v1beta1/params:
-    get:
-      summary: 'this line is used by starport scaffolding # 2'
-      operationId: MunAllocV1Beta1Params
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              params:
-                description: params defines the parameters of the module.
-                type: object
-                properties:
-                  distribution_proportions:
-                    title: >-
-                      distribution_proportions defines the proportion of the
-                      minted denom
-                    type: object
-                    properties:
-                      nft_incentives:
-                        type: string
-                      developer_rewards:
-                        type: string
-                  weighted_developer_rewards_receivers:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        address:
-                          type: string
-                        weight:
-                          type: string
-                    title: address to receive developer rewards
-            description: >-
-              QueryParamsResponse is the response type for the Query/Params RPC
-              method.
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      tags:
-        - Query
   /mun/claim/v1beta1/claim_record/{address}:
     get:
       operationId: MunClaimV1Beta1ClaimRecord
@@ -36012,6 +36015,37 @@ paths:
             - ActionSwap
       tags:
         - Query
+  /mun/claim/v1beta1/merkle_root:
+    get:
+      operationId: MunClaimV1Beta1MerkleRoot
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              merkle_root:
+                type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
   /mun/claim/v1beta1/module_account_balance:
     get:
       summary: 'this line is used by starport scaffolding # 2'
@@ -36088,22 +36122,6 @@ paths:
                   claim_denom:
                     type: string
                     title: denom of claimable asset
-                  allowed_claimers:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        contract_address:
-                          type: string
-                        action:
-                          type: string
-                          enum:
-                            - ActionInitialClaim
-                            - ActionDelegateStake
-                            - ActionVote
-                            - ActionSwap
-                          default: ActionInitialClaim
-                    title: list of contracts and their allowed claim actions
             description: >-
               QueryParamsResponse is the response type for the Query/Params RPC
               method.
@@ -36173,6 +36191,46 @@ paths:
                   additionalProperties: {}
       parameters:
         - name: address
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
+  /mun/claim/v1beta1/verify/{address}/{proof}:
+    get:
+      operationId: MunClaimV1Beta1Whitelisted
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              whitelisted:
+                type: boolean
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: address
+          in: path
+          required: true
+          type: string
+        - name: proof
           in: path
           required: true
           type: string
@@ -58396,81 +58454,6 @@ definitions:
     description: |-
       Version defines the versioning scheme used to negotiate the IBC verison in
       the connection handshake.
-  mun.alloc.v1beta1.DistributionProportions:
-    type: object
-    properties:
-      nft_incentives:
-        type: string
-      developer_rewards:
-        type: string
-  mun.alloc.v1beta1.MsgCreateVestingAccountResponse:
-    type: object
-    description: >-
-      MsgCreateVestingAccountResponse defines the Msg/CreateVestingAccount
-      response
-
-      type.
-  mun.alloc.v1beta1.MsgFundFairburnPoolResponse:
-    type: object
-    description: |-
-      MsgFundFairburnPoolResponse defines the Msg/MsgFundFairburnPool response
-      type.
-  mun.alloc.v1beta1.Params:
-    type: object
-    properties:
-      distribution_proportions:
-        title: distribution_proportions defines the proportion of the minted denom
-        type: object
-        properties:
-          nft_incentives:
-            type: string
-          developer_rewards:
-            type: string
-      weighted_developer_rewards_receivers:
-        type: array
-        items:
-          type: object
-          properties:
-            address:
-              type: string
-            weight:
-              type: string
-        title: address to receive developer rewards
-  mun.alloc.v1beta1.QueryParamsResponse:
-    type: object
-    properties:
-      params:
-        description: params defines the parameters of the module.
-        type: object
-        properties:
-          distribution_proportions:
-            title: >-
-              distribution_proportions defines the proportion of the minted
-              denom
-            type: object
-            properties:
-              nft_incentives:
-                type: string
-              developer_rewards:
-                type: string
-          weighted_developer_rewards_receivers:
-            type: array
-            items:
-              type: object
-              properties:
-                address:
-                  type: string
-                weight:
-                  type: string
-            title: address to receive developer rewards
-    description: QueryParamsResponse is the response type for the Query/Params RPC method.
-  mun.alloc.v1beta1.WeightedAddress:
-    type: object
-    properties:
-      address:
-        type: string
-      weight:
-        type: string
   mun.claim.v1beta1.Action:
     type: string
     enum:
@@ -58479,19 +58462,6 @@ definitions:
       - ActionVote
       - ActionSwap
     default: ActionInitialClaim
-  mun.claim.v1beta1.ClaimAuthorization:
-    type: object
-    properties:
-      contract_address:
-        type: string
-      action:
-        type: string
-        enum:
-          - ActionInitialClaim
-          - ActionDelegateStake
-          - ActionVote
-          - ActionSwap
-        default: ActionInitialClaim
   mun.claim.v1beta1.ClaimRecord:
     type: object
     properties:
@@ -58547,24 +58517,8 @@ definitions:
             NOTE: The amount field is an Int which implements the custom method
             signatures required by gogoproto.
         title: total initial claimable amount for the user
-  mun.claim.v1beta1.MsgInitialClaimResponse:
+  mun.claim.v1beta1.MsgUpdateMerkleRootResponse:
     type: object
-    properties:
-      claimed_amount:
-        type: array
-        items:
-          type: object
-          properties:
-            denom:
-              type: string
-            amount:
-              type: string
-          description: |-
-            Coin defines a token with a denomination and an amount.
-
-            NOTE: The amount field is an Int which implements the custom method
-            signatures required by gogoproto.
-        title: total initial claimable amount for the user
   mun.claim.v1beta1.Params:
     type: object
     properties:
@@ -58580,22 +58534,6 @@ definitions:
       claim_denom:
         type: string
         title: denom of claimable asset
-      allowed_claimers:
-        type: array
-        items:
-          type: object
-          properties:
-            contract_address:
-              type: string
-            action:
-              type: string
-              enum:
-                - ActionInitialClaim
-                - ActionDelegateStake
-                - ActionVote
-                - ActionSwap
-              default: ActionInitialClaim
-        title: list of contracts and their allowed claim actions
     description: Params defines the claim module's parameters.
   mun.claim.v1beta1.QueryClaimRecordResponse:
     type: object
@@ -58655,6 +58593,11 @@ definitions:
 
             NOTE: The amount field is an Int which implements the custom method
             signatures required by gogoproto.
+  mun.claim.v1beta1.QueryMerkleRootResponse:
+    type: object
+    properties:
+      merkle_root:
+        type: string
   mun.claim.v1beta1.QueryModuleAccountBalanceResponse:
     type: object
     properties:
@@ -58693,22 +58636,6 @@ definitions:
           claim_denom:
             type: string
             title: denom of claimable asset
-          allowed_claimers:
-            type: array
-            items:
-              type: object
-              properties:
-                contract_address:
-                  type: string
-                action:
-                  type: string
-                  enum:
-                    - ActionInitialClaim
-                    - ActionDelegateStake
-                    - ActionVote
-                    - ActionSwap
-                  default: ActionInitialClaim
-            title: list of contracts and their allowed claim actions
     description: QueryParamsResponse is the response type for the Query/Params RPC method.
   mun.claim.v1beta1.QueryTotalClaimableResponse:
     type: object
@@ -58727,6 +58654,11 @@ definitions:
 
             NOTE: The amount field is an Int which implements the custom method
             signatures required by gogoproto.
+  mun.claim.v1beta1.QueryWhitelistedResponse:
+    type: object
+    properties:
+      whitelisted:
+        type: boolean
   mun.ibank.MsgReceiveResponse:
     type: object
   mun.ibank.MsgSendResponse:

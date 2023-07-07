@@ -198,7 +198,9 @@ func overwriteFlagDefaults(c *cobra.Command, defaults map[string]string) {
 	set := func(s *pflag.FlagSet, key, val string) {
 		if f := s.Lookup(key); f != nil {
 			f.DefValue = val
-			f.Value.Set(val)
+			if err := f.Value.Set(val); err != nil {
+				panic(err)
+			}
 		}
 	}
 	for key, val := range defaults {
@@ -247,7 +249,7 @@ func (a appCreator) newApp(
 		panic(err)
 	}
 
-	return app.New(
+	return app.NewMunApp(
 		logger,
 		db,
 		traceStore,
@@ -288,7 +290,7 @@ func (a appCreator) appExport(
 		return servertypes.ExportedApp{}, errors.New("application home not set")
 	}
 
-	app := app.New(
+	app := app.NewMunApp(
 		logger,
 		db,
 		traceStore,

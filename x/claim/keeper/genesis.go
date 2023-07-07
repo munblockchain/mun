@@ -18,6 +18,7 @@ func (k Keeper) InitGenesis(ctx sdk.Context, data types.GenesisState) []abci.Val
 	if err != nil {
 		panic(err)
 	}
+	k.SetMerkleRoot(ctx, data.MerkleRoot)
 	k.SetParams(ctx, data.Params)
 	return nil
 }
@@ -30,5 +31,6 @@ func (k Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	genesis.ModuleAccountBalance = k.GetModuleAccountBalance(ctx)
 	genesis.Params = params
 	genesis.ClaimRecords = k.ClaimRecords(ctx)
+	genesis.MerkleRoot = k.GetMerkleRoot(ctx)
 	return genesis
 }

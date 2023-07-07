@@ -14,11 +14,11 @@ func TestMsgJsonSignBytes(t *testing.T) {
 		src legacytx.LegacyMsg
 		exp string
 	}{
-		"MsgInitialClaim": {
-			src: &MsgInitialClaim{Sender: goodAddress},
+		"MsgClaimFor": {
+			src: &MsgClaimFor{Sender: goodAddress},
 			exp: `
 {
-	"type":"claim/InitialClaim",
+	"type":"claim/ClaimFor",
 	"value": {"sender": "cosmos1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqnrql8a"}
 }`,
 		},

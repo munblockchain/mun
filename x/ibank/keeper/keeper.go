@@ -61,8 +61,7 @@ func (k Keeper) CreateModuleAccount(ctx sdk.Context) {
 
 // This function send amt Coin from `from` account to a module account
 func (k Keeper) SendCoin(ctx sdk.Context, from, to sdk.AccAddress, amt sdk.Coin, password string) error {
-	err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, from, types.ModuleName, sdk.Coins{amt})
-	if err != nil {
+	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, from, types.ModuleName, sdk.Coins{amt}); err != nil {
 		return err
 	}
 
@@ -72,7 +71,7 @@ func (k Keeper) SendCoin(ctx sdk.Context, from, to sdk.AccAddress, amt sdk.Coin,
 		Coins:      sdk.Coins{amt},
 		SentAt:     ctx.BlockTime(),
 		ReceivedAt: ctx.BlockTime(),
-		Status:     types.TXN_PENDING,
+		Status:     types.TxPending,
 		Password:   password,
 		Retry:      3,
 	})
@@ -88,41 +87,46 @@ func (k Keeper) SendCoin(ctx sdk.Context, from, to sdk.AccAddress, amt sdk.Coin,
 	return nil
 }
 
-func (k Keeper) ReceiveCoin(ctx sdk.Context, receiver sdk.AccAddress, transactionId int64, password string) error {
-	txn, found := k.GetTransaction(ctx, uint64(transactionId))
+func (k Keeper) ReceiveCoin(
+	ctx sdk.Context,
+	receiver sdk.AccAddress,
+	transactionID int64,
+	words string,
+) error {
+	txn, found := k.GetTransaction(ctx, uint64(transactionID))
 	if !found {
-		return errors.New("transaction not found")
+		return types.ErrNoTransaction
 	}
 
 	// Check if transaction is performed
-	if txn.Status != types.TXN_PENDING {
-		if txn.Status == types.TXN_SENT {
-			return errors.New("you already performed this transaction")
-		} else if txn.Status == types.TXN_EXPIRED {
-			return errors.New("transaction has expired")
+	if txn.Status != types.TxPending {
+		if txn.Status == types.TxSent {
+			return types.ErrAlreadyReceived
+		} else if txn.Status == types.TxExpired {
+			return types.ErrTxExpired
 		} else {
-			return errors.New("transaction is declined")
+			return types.ErrTxDeclined
 		}
 	}
 
 	// Check if transaction is expired
 	if k.IsExpired(ctx, txn) {
-		return errors.New("transaction has expired")
+		return types.ErrTxExpired
 	}
 
 	to, err := sdk.AccAddressFromBech32(txn.Receiver)
 	if err != nil || !to.Equals(receiver) {
-		return errors.New("receiver not found")
+		return types.ErrInvalidReceiver
 	}
 
 	// check password hash
-	hash := sha256.Sum256([]byte(password))
-	formattedHash := fmt.Sprintf("%x", hash)
-	if txn.Password != formattedHash {
+	// hash := sha256.Sum256([]byte(password))
+	// formattedHash := fmt.Sprintf("%x", hash)
+	if txn.Password != k.GetPasswordFromWords(ctx, words) {
 		txn.Retry--
 
 		if txn.Retry == 0 {
-			// return errors.New("funds returned to sender")
+			// maximum number of retries is exceeded, the funds will return to the sender
 			ctx.EventManager().EmitEvent(
 				sdk.NewEvent(
 					types.EventTypeIBank,
@@ -133,22 +137,22 @@ func (k Keeper) ReceiveCoin(ctx sdk.Context, receiver sdk.AccAddress, transactio
 			)
 
 			return k.Refund(ctx, txn, false)
+		} else {
+			// incorrect password; deduct retry and save
+			k.SetTransaction(ctx, txn)
+			ctx.EventManager().EmitEvent(
+				sdk.NewEvent(
+					types.EventTypeIBank,
+					sdk.NewAttribute(types.AttributeKeyAction, "receive"),
+					sdk.NewAttribute(types.AttributeKeyReceiveSuccess, "false"),
+				),
+			)
+			return nil
 		}
-
-		k.SetTransaction(ctx, txn)
-		// return errors.New("password incorrect")
-		ctx.EventManager().EmitEvent(
-			sdk.NewEvent(
-				types.EventTypeIBank,
-				sdk.NewAttribute(types.AttributeKeyAction, "receive"),
-				sdk.NewAttribute(types.AttributeKeyReceiveSuccess, "false"),
-			),
-		)
-		return nil
 	}
 
 	txn.ReceivedAt = ctx.BlockTime()
-	txn.Status = types.TXN_SENT
+	txn.Status = types.TxSent
 	k.SetTransaction(ctx, txn)
 
 	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, receiver, txn.Coins)
@@ -182,7 +186,7 @@ func (k Keeper) IsExpired(ctx sdk.Context, tranaction types.Transaction) bool {
 }
 
 func (k Keeper) Refund(ctx sdk.Context, transaction types.Transaction, expired bool) error {
-	if transaction.Status != types.TXN_PENDING {
+	if transaction.Status != types.TxPending {
 		return errors.New("only can refund pending txns")
 	}
 
@@ -200,12 +204,17 @@ func (k Keeper) Refund(ctx sdk.Context, transaction types.Transaction, expired b
 	}
 
 	if expired {
-		transaction.Status = types.TXN_EXPIRED
+		transaction.Status = types.TxExpired
 	} else {
-		transaction.Status = types.TXN_DECLINED
+		transaction.Status = types.TxDeclined
 		transaction.Retry = 0
 	}
 	k.SetTransaction(ctx, transaction)
 
 	return nil
+}
+
+func (k Keeper) GetPasswordFromWords(ctx sdk.Context, words string) string {
+	hash := sha256.Sum256([]byte(words))
+	return fmt.Sprintf("%x", hash)
 }

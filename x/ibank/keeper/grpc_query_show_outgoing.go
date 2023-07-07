@@ -40,7 +40,7 @@ func (k Keeper) Outgoing(goCtx context.Context, req *types.QueryOutgoingRequest)
 		}
 
 		// only shows pending transactions
-		if req.Pending && transaction.Status != types.TXN_PENDING {
+		if req.Pending && transaction.Status != types.TxPending {
 			return nil, false
 		}
 
@@ -95,7 +95,6 @@ func paginate(
 		var nextKey []byte
 
 		for ; iterator.Valid(); iterator.Next() {
-
 			if count == limit {
 				nextKey = iterator.Key()
 				break

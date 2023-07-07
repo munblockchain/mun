@@ -9,14 +9,14 @@ import (
 )
 
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	cdc.RegisterConcrete(&MsgInitialClaim{}, "claim/InitialClaim", nil)
+	// cdc.RegisterConcrete(&MsgInitialClaim{}, "claim/InitialClaim", nil)
 	cdc.RegisterConcrete(&MsgClaimFor{}, "claim/ClaimFor", nil)
 	// this line is used by starport scaffolding # 2
 }
 
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil),
-		&MsgInitialClaim{},
+		// &MsgInitialClaim{},
 		&MsgClaimFor{},
 	)
 

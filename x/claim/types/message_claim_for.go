@@ -12,11 +12,11 @@ const (
 	TypeMsgClaimFor = "claim_for"
 )
 
-func NewMsgClaimFor(sender string, address string, action Action) *MsgClaimFor {
+func NewMsgClaimFor(sender string, action Action, proof string) *MsgClaimFor {
 	return &MsgClaimFor{
-		Sender:  sender,
-		Address: address,
-		Action:  action,
+		Sender: sender,
+		Action: action,
+		Proof:  proof,
 	}
 }
 

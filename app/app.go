@@ -3,12 +3,12 @@ package app
 import (
 	"fmt"
 	"io"
-	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
 
-	"github.com/CosmosContracts/juno/v13/docs"
+	"mun/docs"
+
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
@@ -40,8 +40,6 @@ import (
 	tmos "github.com/tendermint/tendermint/libs/os"
 	dbm "github.com/tendermint/tm-db"
 
-	"mun/app/openapiconsole"
-
 	"github.com/CosmWasm/wasmd/x/wasm"
 	wasmclient "github.com/CosmWasm/wasmd/x/wasm/client"
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
@@ -54,6 +52,7 @@ import (
 	v2 "mun/app/upgrades/v2"
 	v3 "mun/app/upgrades/v3"
 	v301 "mun/app/upgrades/v301"
+	v303 "mun/app/upgrades/v303"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 )
 
@@ -138,7 +137,7 @@ func init() {
 }
 
 var (
-	Upgrades = []munupgrade.UpgradeMun{v2.Upgrade, v3.Upgrade, v301.Upgrade}
+	Upgrades = []munupgrade.UpgradeMun{v2.Upgrade, v3.Upgrade, v301.Upgrade, v303.Upgrade}
 )
 
 // App extends an ABCI application, but with most of its parameters exported.
@@ -164,7 +163,7 @@ type App struct {
 }
 
 // New returns a reference to an initialized blockchain app
-func New(
+func NewMunApp(
 	logger log.Logger,
 	db dbm.DB,
 	traceStore io.Writer,
@@ -355,8 +354,7 @@ func (app *App) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APIConfig
 	ModuleBasics.RegisterGRPCGatewayRoutes(clientCtx, apiSvr.GRPCGatewayRouter)
 
 	// register app's OpenAPI routes.
-	apiSvr.Router.Handle("/static/openapi.yml", http.FileServer(http.FS(docs.Docs)))
-	apiSvr.Router.HandleFunc("/", openapiconsole.Handler(Name, "/static/openapi.yml"))
+	docs.RegisterOpenAPIService(Name, apiSvr.Router)
 }
 
 // RegisterTxService implements the Application.RegisterTxService method.

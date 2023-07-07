@@ -8,5 +8,9 @@ import (
 
 // x/ibank module sentinel errors
 var (
-	ErrSample = sdkerrors.Register(ModuleName, 1100, "sample error")
+	ErrNoTransaction   = sdkerrors.Register(ModuleName, 2, "transaction not found")
+	ErrAlreadyReceived = sdkerrors.Register(ModuleName, 3, "already received this fund")
+	ErrTxExpired       = sdkerrors.Register(ModuleName, 4, "transaction has expired")
+	ErrTxDeclined      = sdkerrors.Register(ModuleName, 5, "transaction is declined")
+	ErrInvalidReceiver = sdkerrors.Register(ModuleName, 6, "invalid receiver")
 )

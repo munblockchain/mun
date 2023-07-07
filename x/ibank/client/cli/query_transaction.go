@@ -13,7 +13,7 @@ import (
 
 func CmdListTransaction() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "list-transaction",
+		Use:   "list-transaction [address]",
 		Short: "list all transaction",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

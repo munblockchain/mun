@@ -4,11 +4,8 @@ go 1.19
 
 require (
 	github.com/CosmWasm/wasmd v0.31.0
-	github.com/CosmWasm/wasmvm v1.2.1
-	github.com/CosmosContracts/juno/v13 v13.0.1
-	github.com/armon/go-metrics v0.4.1
-	github.com/cosmos/cosmos-sdk v0.45.15
-	github.com/cosmos/ibc-go/v4 v4.3.0
+	github.com/cosmos/cosmos-sdk v0.45.16
+	github.com/cosmos/ibc-go/v4 v4.4.2
 	github.com/gogo/protobuf v1.3.3
 	github.com/golang/protobuf v1.5.3
 	github.com/gorilla/mux v1.8.0
@@ -19,12 +16,12 @@ require (
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/pflag v1.0.5
 	github.com/strangelove-ventures/packet-forward-middleware/v4 v4.0.5
-	github.com/stretchr/testify v1.8.2
+	github.com/stretchr/testify v1.8.3
 	github.com/tendermint/tendermint v0.34.27
 	github.com/tendermint/tm-db v0.6.8-0.20220506192307-f628bb5dc95b
-	google.golang.org/genproto v0.0.0-20230223222841-637eb2293923
-	google.golang.org/grpc v1.53.0
-	google.golang.org/protobuf v1.29.1
+	google.golang.org/genproto/googleapis/api v0.0.0-20230530153820-e85fd2cbaebc
+	google.golang.org/grpc v1.55.0
+	google.golang.org/protobuf v1.30.0
 	gopkg.in/yaml.v2 v2.4.0
 )
 
@@ -35,10 +32,12 @@ require (
 	filippo.io/edwards25519 v1.0.0 // indirect
 	github.com/99designs/go-keychain v0.0.0-20191008050251-8e49817e8af4 // indirect
 	github.com/99designs/keyring v1.2.1 // indirect
-	github.com/ChainSafe/go-schnorrkel v0.0.0-20200405005733-88cbf1b4c40d // indirect
+	github.com/ChainSafe/go-schnorrkel v1.0.0 // indirect
+	github.com/CosmWasm/wasmvm v1.2.3 // indirect
 	github.com/DataDog/zstd v1.5.0 // indirect
 	github.com/HdrHistogram/hdrhistogram-go v1.1.2 // indirect
 	github.com/Workiva/go-datastructures v1.0.53 // indirect
+	github.com/armon/go-metrics v0.4.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bgentry/speakeasy v0.1.1-0.20220910012023-760eaf8b6816 // indirect
 	github.com/btcsuite/btcd/btcec/v2 v2.3.2 // indirect
@@ -146,10 +145,12 @@ require (
 	go.opencensus.io v0.24.0 // indirect
 	golang.org/x/crypto v0.7.0 // indirect
 	golang.org/x/exp v0.0.0-20230310171629-522b1b587ee0 // indirect
-	golang.org/x/net v0.8.0 // indirect
-	golang.org/x/sys v0.6.0 // indirect
-	golang.org/x/term v0.6.0 // indirect
-	golang.org/x/text v0.8.0 // indirect
+	golang.org/x/net v0.10.0 // indirect
+	golang.org/x/sys v0.8.0 // indirect
+	golang.org/x/term v0.8.0 // indirect
+	golang.org/x/text v0.9.0 // indirect
+	google.golang.org/genproto v0.0.0-20230526203410-71b5a4ffd15e // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20230530153820-e85fd2cbaebc // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	nhooyr.io/websocket v1.8.7 // indirect
@@ -158,6 +159,6 @@ require (
 replace (
 	github.com/cosmos/iavl => github.com/cosmos/iavl v0.19.5
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
-	github.com/tendermint/tendermint => github.com/cometbft/cometbft v0.34.27
+	github.com/tendermint/tendermint => github.com/cometbft/cometbft v0.34.28
 	google.golang.org/grpc => google.golang.org/grpc v1.33.2
 )

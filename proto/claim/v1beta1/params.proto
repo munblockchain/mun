@@ -41,9 +41,10 @@ message Params {
   string claim_denom = 5;
 
   // list of contracts and their allowed claim actions
-  repeated ClaimAuthorization allowed_claimers = 6 [
-    (gogoproto.nullable) = false,
-    (gogoproto.jsontag) = "allowed_claimers",
-    (gogoproto.moretags) = "yaml:\"allowed_claimers\""
-  ];
+  // repeated ClaimAuthorization allowed_claimers = 6 [
+  //   (gogoproto.nullable) = false,
+  //   (gogoproto.jsontag) = "allowed_claimers",
+  //   (gogoproto.moretags) = "yaml:\"allowed_claimers\""
+  // ];
+  reserved 6;
 }

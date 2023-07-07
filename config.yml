@@ -39,6 +39,8 @@ client:
     path: ts-client
   vuex:
     path: vue/src/store
+  composables:
+    path: vue/src/composables
   hooks:
     path: react/src/hooks
   openapi:

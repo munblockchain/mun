@@ -1,8 +1,6 @@
 package app
 
 import (
-	allocmodule "mun/x/alloc"
-	allocmoduletypes "mun/x/alloc/types"
 	claimmodule "mun/x/claim"
 	claimmoduletypes "mun/x/claim/types"
 	ibankmodule "mun/x/ibank"
@@ -81,26 +79,23 @@ var ModuleBasics = module.NewBasicManager(
 	vesting.AppModuleBasic{},
 	wasm.AppModuleBasic{},
 	claimmodule.AppModuleBasic{},
-	allocmodule.AppModuleBasic{},
 	ibankmodule.AppModuleBasic{},
 	// this line is used by starport scaffolding # stargate/app/moduleBasic
 )
 
 // module account permissions
 var maccPerms = map[string][]string{
-	authtypes.FeeCollectorName:        nil,
-	distrtypes.ModuleName:             nil,
-	icatypes.ModuleName:               nil,
-	minttypes.ModuleName:              {authtypes.Minter},
-	stakingtypes.BondedPoolName:       {authtypes.Burner, authtypes.Staking},
-	stakingtypes.NotBondedPoolName:    {authtypes.Burner, authtypes.Staking},
-	govtypes.ModuleName:               {authtypes.Burner},
-	ibctransfertypes.ModuleName:       {authtypes.Minter, authtypes.Burner},
-	wasm.ModuleName:                   {authtypes.Burner},
-	claimmoduletypes.ModuleName:       {authtypes.Minter, authtypes.Burner, authtypes.Staking},
-	allocmoduletypes.ModuleName:       {authtypes.Minter, authtypes.Burner, authtypes.Staking},
-	allocmoduletypes.FairburnPoolName: nil,
-	ibankmoduletypes.ModuleName:       nil,
+	authtypes.FeeCollectorName:     nil,
+	distrtypes.ModuleName:          nil,
+	icatypes.ModuleName:            nil,
+	minttypes.ModuleName:           {authtypes.Minter},
+	stakingtypes.BondedPoolName:    {authtypes.Burner, authtypes.Staking},
+	stakingtypes.NotBondedPoolName: {authtypes.Burner, authtypes.Staking},
+	govtypes.ModuleName:            {authtypes.Burner},
+	ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
+	wasm.ModuleName:                {authtypes.Burner},
+	claimmoduletypes.ModuleName:    {authtypes.Minter, authtypes.Burner, authtypes.Staking},
+	ibankmoduletypes.ModuleName:    nil,
 
 	// this line is used by starport scaffolding # stargate/app/maccPerms
 }
@@ -110,7 +105,6 @@ func NewModuleManager(
 	encodingConfig appparams.EncodingConfig,
 	skipGenesisInvariants bool,
 ) *module.Manager {
-
 	appCodec := encodingConfig.Marshaler
 
 	// NOTE: Any module instantiated in the module manager that is later modified
@@ -132,14 +126,13 @@ func NewModuleManager(
 		staking.NewAppModule(appCodec, app.StakingKeeper, app.AccountKeeper, app.BankKeeper),
 		upgrade.NewAppModule(app.UpgradeKeeper),
 		evidence.NewAppModule(app.EvidenceKeeper),
-		ibc.NewAppModule(app.IBCKeeper),
 		params.NewAppModule(app.ParamsKeeper),
+		ibc.NewAppModule(app.IBCKeeper),
 		ibctransfer.NewAppModule(app.TransferKeeper),
 		ica.NewAppModule(&app.ICAControllerKeeper, &app.ICAHostKeeper),
 		ibcfee.NewAppModule(app.IBCFeeKeeper),
 		wasm.NewAppModule(appCodec, &app.WasmKeeper, app.StakingKeeper, app.AccountKeeper, app.BankKeeper),
-		claimmodule.NewAppModule(appCodec, app.ClaimKeeper),
-		allocmodule.NewAppModule(appCodec, app.AllocKeeper),
+		claimmodule.NewAppModule(appCodec, app.AccountKeeper, app.BankKeeper, app.ClaimKeeper),
 		ibankmodule.NewAppModule(appCodec, app.IbankKeeper, app.AccountKeeper, app.BankKeeper),
 		// this line is used by starport scaffolding # stargate/app/appModule
 	)
@@ -149,8 +142,8 @@ func NewModuleSimulationManager(
 	app *App,
 	encodingConfig appparams.EncodingConfig,
 ) *module.SimulationManager {
-
 	appCodec := encodingConfig.Marshaler
+	icaModule := ica.NewAppModule(&app.ICAControllerKeeper, &app.ICAHostKeeper)
 
 	return module.NewSimulationManager(
 		auth.NewAppModule(appCodec, app.AccountKeeper, authsims.RandomGenesisAccounts),
@@ -167,7 +160,11 @@ func NewModuleSimulationManager(
 		evidence.NewAppModule(app.EvidenceKeeper),
 		ibc.NewAppModule(app.IBCKeeper),
 		ibctransfer.NewAppModule(app.TransferKeeper),
-
+		ibcfee.NewAppModule(app.IBCFeeKeeper),
+		// wasm.NewAppModule(appCodec, &app.WasmKeeper, app.StakingKeeper, app.AccountKeeper, app.BankKeeper),
+		claimmodule.NewAppModule(appCodec, app.AccountKeeper, app.BankKeeper, app.ClaimKeeper),
+		ibankmodule.NewAppModule(appCodec, app.IbankKeeper, app.AccountKeeper, app.BankKeeper),
+		NewICAHostSimModule(icaModule, app.appCodec),
 		// this line is used by starport scaffolding # stargate/app/appModule
 	)
 }
@@ -179,7 +176,6 @@ func OrderBeginBlockers() []string {
 	// NOTE: staking module is required if HistoricalEntries param > 0
 	return []string{
 		upgradetypes.ModuleName,
-		allocmoduletypes.ModuleName, // must run before distribution begin blocker
 		capabilitytypes.ModuleName,
 		minttypes.ModuleName,
 		distrtypes.ModuleName,
@@ -229,7 +225,7 @@ func OrderEndBlockers() []string {
 		ibctransfertypes.ModuleName,
 		icatypes.ModuleName,
 		ibcfeetypes.ModuleName,
-		allocmoduletypes.ModuleName, claimmoduletypes.ModuleName,
+		claimmoduletypes.ModuleName,
 		wasm.ModuleName,
 		ibankmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/aspp/endBlockers
@@ -263,7 +259,6 @@ func OrderInitGenesis() []string {
 		ibcfeetypes.ModuleName,
 		feegrant.ModuleName,
 		claimmoduletypes.ModuleName,
-		allocmoduletypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 		wasm.ModuleName,
 		ibankmoduletypes.ModuleName,

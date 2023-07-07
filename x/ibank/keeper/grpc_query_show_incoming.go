@@ -36,7 +36,7 @@ func (k Keeper) Incoming(goCtx context.Context, req *types.QueryIncomingRequest)
 		}
 
 		// only shows pending transactions
-		if req.Pending && transaction.Status != types.TXN_PENDING {
+		if req.Pending && transaction.Status != types.TxPending {
 			return nil, false
 		}
 

@@ -32,7 +32,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/upgrade"
 	upgradekeeper "github.com/cosmos/cosmos-sdk/x/upgrade/keeper"
 
-	// icacontroller "github.com/cosmos/ibc-go/v4/modules/apps/27-interchain-accounts/controller"
 	icacontrollerkeeper "github.com/cosmos/ibc-go/v4/modules/apps/27-interchain-accounts/controller/keeper"
 	icacontrollertypes "github.com/cosmos/ibc-go/v4/modules/apps/27-interchain-accounts/controller/types"
 
@@ -47,9 +46,6 @@ import (
 
 	claimmodulekeeper "mun/x/claim/keeper"
 	claimmoduletypes "mun/x/claim/types"
-
-	allocmodulekeeper "mun/x/alloc/keeper"
-	allocmoduletypes "mun/x/alloc/types"
 
 	ibankmodulekeeper "mun/x/ibank/keeper"
 	ibankmoduletypes "mun/x/ibank/types"
@@ -117,7 +113,6 @@ type AppKeepers struct {
 
 	// stargaze modules
 	ClaimKeeper claimmodulekeeper.Keeper
-	AllocKeeper allocmodulekeeper.Keeper
 	IbankKeeper ibankmodulekeeper.Keeper
 }
 
@@ -135,7 +130,6 @@ func NewAppKeepers(
 	appOpts servertypes.AppOptions,
 	wasmOpts []wasm.Option,
 ) AppKeepers {
-
 	keys := newKVStoreKeys()
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -417,34 +411,12 @@ func NewAppKeepers(
 		),
 	)
 
-	app.AllocKeeper = *allocmodulekeeper.NewKeeper(
-		appCodec,
-		keys[allocmoduletypes.StoreKey],
-		app.AccountKeeper,
-		app.BankKeeper,
-		app.StakingKeeper,
-		app.DistrKeeper,
-		app.GetSubspace(allocmoduletypes.ModuleName),
-	)
-
 	app.ScopedIBCKeeper = scopedIBCKeeper
 	app.ScopedTransferKeeper = scopedTransferKeeper
 	app.ScopedWasmKeeper = scopedWasmKeeper
 	// this line is used by starport scaffolding # stargate/app/beforeInitReturn
 
 	return app
-}
-
-func (appKeepers *AppKeepers) GetKey(storeKey string) *sdk.KVStoreKey {
-	return appKeepers.keys[storeKey]
-}
-
-func (aks *AppKeepers) GetSubspace(moduleName string) paramstypes.Subspace {
-	subspace, ok := aks.ParamsKeeper.GetSubspace(moduleName)
-	if !ok {
-		panic(moduleName + " module subspace does not exist")
-	}
-	return subspace
 }
 
 // initParamsKeeper init params keeper and its subspaces
@@ -464,15 +436,27 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(ibchost.ModuleName)
 	paramsKeeper.Subspace(icacontrollertypes.SubModuleName)
 	paramsKeeper.Subspace(icahosttypes.SubModuleName)
-	paramsKeeper.Subspace(claimmoduletypes.ModuleName)
-	paramsKeeper.Subspace(allocmoduletypes.ModuleName)
 	paramsKeeper.Subspace(ibcporttypes.SubModuleName)
-	// this line is used by starport scaffolding # stargate/app/paramSubspace
 	paramsKeeper.Subspace(wasm.ModuleName)
+	paramsKeeper.Subspace(claimmoduletypes.ModuleName)
 	paramsKeeper.Subspace(ibankmoduletypes.ModuleName)
+	// this line is used by starport scaffolding # stargate/app/paramSubspace
 
 	return paramsKeeper
 }
+
+func (appKeepers *AppKeepers) GetKey(storeKey string) *sdk.KVStoreKey {
+	return appKeepers.keys[storeKey]
+}
+
+func (appKeepers *AppKeepers) GetSubspace(moduleName string) paramstypes.Subspace {
+	subspace, ok := appKeepers.ParamsKeeper.GetSubspace(moduleName)
+	if !ok {
+		panic(moduleName + " module subspace does not exist")
+	}
+	return subspace
+}
+
 func (appKeepers *AppKeepers) GetKVStoreKey() map[string]*storetypes.KVStoreKey {
 	return appKeepers.keys
 }

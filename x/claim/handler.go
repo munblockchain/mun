@@ -19,8 +19,8 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 	return func(ctx sdk.Context, msg sdk.Msg) (*sdk.Result, error) {
 		ctx = ctx.WithEventManager(sdk.NewEventManager())
 		switch msg := msg.(type) {
-		case *types.MsgInitialClaim:
-			res, err := msgServer.InitialClaim(sdk.WrapSDKContext(ctx), msg)
+		case *types.MsgUpdateMerkleRoot:
+			res, err := msgServer.UpdateMerkleRoot(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 		case *types.MsgClaimFor:
 			res, err := msgServer.ClaimFor(sdk.WrapSDKContext(ctx), msg)

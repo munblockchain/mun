@@ -1,8 +1,8 @@
 package types
 
 const (
-	TXN_PENDING  TxnStatus = 0
-	TXN_SENT     TxnStatus = 1
-	TXN_EXPIRED  TxnStatus = 2
-	TXN_DECLINED TxnStatus = 3
+	TxPending  TxnStatus = 0
+	TxSent     TxnStatus = 1
+	TxExpired  TxnStatus = 2
+	TxDeclined TxnStatus = 3
 )

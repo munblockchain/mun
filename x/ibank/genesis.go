@@ -16,7 +16,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 
 	k.CreateModuleAccount(ctx)
 	k.SetTransactionCount(ctx, genState.TransactionCount)
-	k.SetTransactionChaser(ctx, 0)
+	k.SetTransactionChaser(ctx, genState.TransactionChaser)
 
 	// this line is used by starport scaffolding # genesis/module/init
 	k.SetParams(ctx, genState.Params)
@@ -29,6 +29,7 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 
 	genesis.TransactionList = k.GetAllTransaction(ctx)
 	genesis.TransactionCount = k.GetTransactionCount(ctx)
+	genesis.TransactionChaser = k.GetTransactionChaser(ctx)
 	// this line is used by starport scaffolding # genesis/module/export
 
 	return genesis

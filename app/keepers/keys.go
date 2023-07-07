@@ -27,8 +27,6 @@ import (
 
 	claimmoduletypes "mun/x/claim/types"
 
-	allocmoduletypes "mun/x/alloc/types"
-
 	ibankmoduletypes "mun/x/ibank/types"
 )
 
@@ -39,7 +37,7 @@ func newKVStoreKeys() map[string]*storetypes.KVStoreKey {
 		govtypes.StoreKey, paramstypes.StoreKey, ibchost.StoreKey, upgradetypes.StoreKey, feegrant.StoreKey,
 		evidencetypes.StoreKey, ibctransfertypes.StoreKey, icahosttypes.StoreKey, capabilitytypes.StoreKey,
 		ibcfeetypes.StoreKey, packetforwardtypes.StoreKey, icacontrollertypes.StoreKey,
-		wasm.StoreKey, claimmoduletypes.StoreKey, allocmoduletypes.StoreKey, ibankmoduletypes.StoreKey,
+		wasm.StoreKey, claimmoduletypes.StoreKey, ibankmoduletypes.StoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
 	)
 }

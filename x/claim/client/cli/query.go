@@ -35,6 +35,8 @@ func GetQueryCmd(queryRoute string) *cobra.Command {
 		GetCmdQueryClaimRecord(),
 		GetCmdQueryClaimableForAction(),
 		GetCmdQueryTotalClaimable(),
+		GetCmdQueryMerkleRoot(),
+		GetCmdQueryWhitelisted(),
 	)
 	// this line is used by starport scaffolding # 1
 
@@ -198,6 +200,57 @@ $ %s query claim total-claimable osmo1ey69r37gfxvxg62sh4r0ktpuc46pzjrm23kcrx
 			// Query store
 			res, err := queryClient.TotalClaimable(context.Background(), &types.QueryTotalClaimableRequest{
 				Address: args[0],
+			})
+			if err != nil {
+				return err
+			}
+			return clientCtx.PrintObjectLegacy(res)
+		},
+	}
+	flags.AddQueryFlagsToCmd(cmd)
+	return cmd
+}
+
+func GetCmdQueryMerkleRoot() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "merkle-root",
+		Args:  cobra.ExactArgs(0),
+		Short: "Query merkle root.",
+		Long:  "Query merkle root.",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+			queryClient := types.NewQueryClient(clientCtx)
+			// Query store
+			res, err := queryClient.MerkleRoot(context.Background(), &types.QueryMerkleRootRequest{})
+			if err != nil {
+				return err
+			}
+			return clientCtx.PrintObjectLegacy(res)
+		},
+	}
+	flags.AddQueryFlagsToCmd(cmd)
+	return cmd
+}
+
+func GetCmdQueryWhitelisted() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "whitelisted [address] [proof]",
+		Args:  cobra.ExactArgs(2),
+		Short: "Query whether address is whitelisted.",
+		Long:  "Query whether address is whitelisted.",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+			queryClient := types.NewQueryClient(clientCtx)
+			// Query store
+			res, err := queryClient.Whitelisted(context.Background(), &types.QueryWhitelistedRequest{
+				Address: args[0],
+				Proof:   args[1],
 			})
 			if err != nil {
 				return err

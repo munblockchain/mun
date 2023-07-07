@@ -29,4 +29,7 @@ message GenesisState {
     (gogoproto.moretags) = "yaml:\"claim_records\"",
     (gogoproto.nullable) = false
   ];
+
+  string merkle_root = 4;
+
 }
