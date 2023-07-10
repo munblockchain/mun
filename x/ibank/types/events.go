@@ -7,7 +7,8 @@ const (
 	AttributeKeyReceiveSuccess = "receive_success"
 	AttributeKeyRefunded       = "refund"
 	AttributeKeySender         = "sender"
-	AttributeKeyReceiver       = "receiver"
+	AttributeKeyRecipient      = "recipient"
+	AttributeKeyRemittanceID   = "remittance_id"
 	AttributeKeyAmount         = "amount"
 	AttributeKeyAction         = "action"
 )

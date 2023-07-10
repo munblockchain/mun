@@ -4,6 +4,7 @@ import (
 	"crypto/sha256"
 	"errors"
 	"fmt"
+	"strconv"
 
 	"mun/x/ibank/types"
 
@@ -65,7 +66,7 @@ func (k Keeper) SendCoin(ctx sdk.Context, from, to sdk.AccAddress, amt sdk.Coin,
 		return err
 	}
 
-	k.AppendTransaction(ctx, types.Transaction{
+	txnID := k.AppendTransaction(ctx, types.Transaction{
 		Sender:     from.String(),
 		Receiver:   to.String(),
 		Coins:      sdk.Coins{amt},
@@ -80,8 +81,9 @@ func (k Keeper) SendCoin(ctx sdk.Context, from, to sdk.AccAddress, amt sdk.Coin,
 		types.EventTypeIBank,
 		sdk.NewAttribute(types.AttributeKeyAction, "send"),
 		sdk.NewAttribute(types.AttributeKeySender, from.String()),
-		sdk.NewAttribute(types.AttributeKeyReceiver, to.String()),
+		sdk.NewAttribute(types.AttributeKeyRecipient, to.String()),
 		sdk.NewAttribute(types.AttributeKeyAmount, amt.Amount.String()+amt.GetDenom()),
+		sdk.NewAttribute(types.AttributeKeyRemittanceID, strconv.FormatUint(txnID, 10)),
 	))
 
 	return nil

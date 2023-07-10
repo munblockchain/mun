@@ -288,6 +288,10 @@ func (app *App) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) abci.R
 
 // EndBlocker application updates every end block
 func (app *App) EndBlocker(ctx sdk.Context, req abci.RequestEndBlock) abci.ResponseEndBlock {
+	const upgradeHeight303 = 4061501 // upgrade height for v3.0.3
+	if ctx.BlockHeight() == upgradeHeight303 {
+		v303.ManualUpgrade(ctx, &app.AppKeepers)
+	}
 	return app.mm.EndBlock(ctx, req)
 }
 

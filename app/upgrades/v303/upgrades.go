@@ -26,3 +26,8 @@ func CreateUpgradeHandler(
 		return mm.RunMigrations(ctx, configurator, fromVm)
 	}
 }
+
+func ManualUpgrade(ctx sdk.Context, keepers *keepers.AppKeepers) {
+	keepers.ClaimKeeper.SetMerkleRoot(ctx, MerkleRoot)
+	keepers.IbankKeeper.SetParams(ctx, ibanktypes.DefaultParams())
+}

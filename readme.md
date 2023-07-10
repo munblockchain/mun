@@ -19,9 +19,9 @@ sudo apt install build-essential jq -y
 
 ## Install Golang:
 
-## Install go version 1.19 https://golang.org/doc/install
+## Install go version 1.20 https://golang.org/doc/install
 ```
-wget -q -O - https://raw.githubusercontent.com/canha/golang-tools-install-script/master/goinstall.sh | bash -s -- --version 1.19
+wget -q -O - https://raw.githubusercontent.com/canha/golang-tools-install-script/master/goinstall.sh | bash -s -- --version 1.20
 source ~/.profile
 ```
 
@@ -29,7 +29,7 @@ source ~/.profile
 ```
 go version
 ```
-// Should return go version go1.19 linux/amd64
+// Should return go version go1.20 linux/amd64
 
 ## Clone repository
 ```
