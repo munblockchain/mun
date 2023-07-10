@@ -1,8 +1,7 @@
-vue/node_modules
-vue/dist
-ts-client/node_modules
-ts-client/package-loc.json
+vue/
+ts-client/
 release/
+build/
 .idea/
 .vscode/
 .DS_Store
